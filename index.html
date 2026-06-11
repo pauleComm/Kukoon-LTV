@@ -1,14 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Kukoon LTV Performance Dashboard</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Calibri',system-ui,sans-serif;background:#F5EDF0;padding:20px;}
-.wrap{max-width:1200px;margin:0 auto;background:white;border-radius:14px;padding:24px;box-shadow:0 2px 16px rgba(69,14,34,0.08);}
+.kk{font-family:'Calibri',system-ui,sans-serif;}
 .mono{font-family:'Courier New',Courier,monospace;}
 .tn{display:flex;flex-wrap:wrap;border-bottom:2px solid #E6CAD0;margin:14px 0 20px;}
 .tb{background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;font-family:'Courier New',Courier,monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;padding:10px 13px;color:#8C5B6A;}
@@ -16,29 +8,37 @@ body{font-family:'Calibri',system-ui,sans-serif;background:#F5EDF0;padding:20px;
 .tb:hover:not(.active){color:#450E22;}
 .c3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:18px;}
 .c4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:18px;}
-.card{background:white;border-radius:10px;border:0.5px solid #D3A9B3;border-top:3px solid #450E22;padding:14px 16px;}
+.card{background:var(--color-background-primary);border-radius:10px;border:0.5px solid #D3A9B3;border-top:3px solid #450E22;padding:14px 16px;}
 .cl{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#8C5B6A;font-family:'Courier New',Courier,monospace;}
 .cv{font-family:Georgia,serif;font-size:24px;color:#450E22;font-weight:500;margin:6px 0 2px;}
 .cs{font-size:11px;color:#8C5B6A;}
-.pn{background:white;border-radius:10px;border:0.5px solid #D3A9B3;padding:18px;}
+.pn{background:var(--color-background-primary);border-radius:10px;border:0.5px solid #D3A9B3;padding:18px;}
 .lg{display:flex;flex-wrap:wrap;gap:18px;margin-bottom:14px;}
 .li{display:flex;align-items:center;gap:6px;font-family:'Courier New',Courier,monospace;font-size:11px;}
+.up2{background:#F5EDF0;border-radius:10px;border:0.5px solid #D3A9B3;padding:16px;margin-top:14px;}
+.ug{display:grid;grid-template-columns:90px 1fr;gap:8px 12px;margin-top:12px;align-items:start;}
+.ul2{font-family:'Courier New',Courier,monospace;font-size:10px;color:#8C5B6A;padding-top:7px;text-transform:uppercase;letter-spacing:1px;}
+textarea,.ui{width:100%;font-family:'Courier New',Courier,monospace;font-size:10px;color:#450E22;border:0.5px solid #D3A9B3;border-radius:6px;padding:6px 8px;background:white;resize:none;line-height:1.6;}
+textarea:focus,.ui:focus{outline:none;border-color:#8C5B6A;}
+.ui{height:32px;}
+.sb{background:#450E22;color:white;border:none;border-radius:6px;padding:8px 20px;font-family:'Courier New',Courier,monospace;font-size:11px;cursor:pointer;}
+.sb:hover{background:#5a1230;}
+.lnk{background:none;border:none;cursor:pointer;font-family:'Courier New',Courier,monospace;font-size:10px;color:#8C5B6A;text-decoration:underline;padding:0;}
 .up{color:#2a6e2a;}.dn{color:#b83030;}
 .ins{background:#F5EDF0;border-left:3px solid #450E22;border-radius:0 8px 8px 0;padding:10px 14px;margin-top:14px;font-family:'Courier New',Courier,monospace;font-size:11px;color:#450E22;}
-.fn{font-family:'Courier New',Courier,monospace;font-size:10px;color:#8C5B6A;margin-top:10px;}
 .badge{background:#450E22;color:#F5EDF0;border-radius:6px;padding:4px 10px;font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;}
+.fn{font-family:'Courier New',Courier,monospace;font-size:10px;color:#8C5B6A;margin-top:10px;}
 </style>
-</head>
-<body>
-<div class="wrap">
+
+<div class="kk">
 <div style="display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:4px;">
   <div>
     <div class="mono" style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#8C5B6A;margin-bottom:4px;">kukoon analytics</div>
     <div style="font-family:Georgia,serif;font-size:22px;font-weight:500;color:#450E22;">LTV Performance Dashboard</div>
   </div>
   <div style="display:flex;align-items:center;gap:10px;">
-    <div class="mono" style="font-size:10px;color:#8C5B6A;">Updated: May 2026</div>
-    <div class="badge">View Only</div>
+    <div id="hd" class="mono" style="font-size:10px;color:#8C5B6A;"></div>
+    <div class="badge">Admin</div>
   </div>
 </div>
 
@@ -57,65 +57,1205 @@ body{font-family:'Calibri',system-ui,sans-serif;background:#F5EDF0;padding:20px;
   <button class="tb" data-t="rc" onclick="sw('rc')">Returning Customers</button>
 </div>
 
-<div id="t-cf"><div class="c3" id="cfK"></div><div class="pn"><div class="lg"><div class="li"><span style="width:28px;height:2.5px;background:#450E22;border-radius:2px;display:inline-block;"></span><span style="color:#450E22;">2025 avg</span></div><div class="li"><span style="width:28px;height:2px;background:#8C5B6A;border-radius:2px;display:inline-block;"></span><span style="color:#8C5B6A;">total avg</span></div><div class="li"><span style="width:28px;height:2px;background:#D3A9B3;border-radius:2px;display:inline-block;"></span><span style="color:#D3A9B3;">2024 avg</span></div><div class="li"><span style="width:28px;border-top:2px dashed #8C5B6A;display:inline-block;opacity:.7;"></span><span style="color:#8C5B6A;opacity:.8;">cumulative (right)</span></div></div><div style="position:relative;width:100%;height:340px;"><canvas id="cfC"></canvas></div></div><div id="cfN" class="fn"></div></div>
-<div id="t-nc" style="display:none;"><div class="c4" id="ncK"></div><div class="pn"><div class="lg"><div class="li"><span style="width:14px;height:14px;background:#450E22;border-radius:2px;display:inline-block;"></span><span style="color:#450E22;">new customers</span></div><div class="li"><span style="width:28px;height:2px;background:#8C5B6A;border-radius:2px;display:inline-block;"></span><span style="color:#8C5B6A;">YoY % (right)</span></div></div><div style="position:relative;width:100%;height:340px;"><canvas id="ncC"></canvas></div></div><div id="ncN" class="fn"></div></div>
-<div id="t-aov" style="display:none;"><div class="c4" id="aovK"></div><div class="pn"><div class="lg"><div class="li"><span style="width:28px;height:2.5px;background:#450E22;border-radius:2px;display:inline-block;"></span><span style="color:#450E22;">AOV (£)</span></div><div class="li"><span style="width:28px;border-top:2px dashed #8C5B6A;display:inline-block;opacity:.8;"></span><span style="color:#8C5B6A;opacity:.8;">YoY % (right)</span></div></div><div style="position:relative;width:100%;height:340px;"><canvas id="aovC"></canvas></div></div><div id="aovN" class="fn"></div></div>
-<div id="t-cac" style="display:none;"><div class="c4" id="cacK"></div><div class="pn"><div class="lg"><div class="li"><span style="width:14px;height:14px;background:#450E22;border-radius:2px;display:inline-block;"></span><span style="color:#450E22;">new customers (left)</span></div><div class="li"><span style="width:28px;height:2.5px;background:#8C5B6A;border-radius:2px;display:inline-block;"></span><span style="color:#8C5B6A;">CAC £ (right)</span></div><div class="li"><span style="width:28px;border-top:2px dotted #450E22;display:inline-block;"></span><span style="color:#450E22;">NC YoY % (right)</span></div><div class="li"><span style="width:28px;border-top:2px dashed #D3A9B3;display:inline-block;"></span><span style="color:#D3A9B3;">ad fees % (right)</span></div></div><div style="position:relative;width:100%;height:340px;"><canvas id="cacC"></canvas></div><div id="cacI" class="ins"></div></div><div id="cacN" class="fn"></div></div>
-<div id="t-ltv" style="display:none;"><div class="c3" id="ltvK"></div><div class="pn"><div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px;"><div class="lg" style="margin-bottom:0;"><div class="li"><span style="width:14px;height:14px;background:#450E22;border-radius:2px;display:inline-block;"></span><span style="color:#450E22;">banked TM</span></div><div class="li"><span style="width:14px;height:14px;background:#ECD6DC;border-radius:2px;display:inline-block;"></span><span style="color:#8C5B6A;">predicted to M+28</span></div></div><div style="display:flex;align-items:center;gap:10px;"><span class="mono" style="font-size:10px;color:#8C5B6A;">TM per return visit: £<span id="tmV">75</span></span><input type="range" min="20" max="150" step="5" value="75" style="width:110px;cursor:pointer;accent-color:#450E22;" oninput="cohTm=+this.value;document.getElementById('tmV').textContent=this.value;rLTV();rPB();"></div></div><div style="position:relative;width:100%;height:650px;"><canvas id="ltvC"></canvas></div></div><div style="overflow-x:auto;margin-top:14px;"><table id="ltvT" style="width:100%;border-collapse:collapse;font-family:'Courier New',monospace;font-size:10px;color:#44546A;"></table></div><div id="ltvN" class="fn"></div></div>
-<div id="t-pb" style="display:none;"><div class="c4" id="pbK"></div><div class="pn"><div class="lg"><div class="li"><span style="width:28px;height:2.5px;background:#450E22;border-radius:2px;display:inline-block;"></span><span style="color:#450E22;">TM banked cumulative</span></div><div class="li"><span style="width:14px;height:14px;background:#ECD6DC;border-radius:2px;display:inline-block;opacity:.8;"></span><span style="color:#8C5B6A;">TM prebooked outstanding</span></div></div><div style="position:relative;width:100%;height:360px;"><canvas id="pbC"></canvas></div></div><div id="pbN" class="fn"></div></div>
-<div id="t-hl" style="display:none;"><div class="c4" id="hlK"></div><div class="pn"><div class="lg"><div class="li"><span style="width:28px;height:2px;background:#450E22;border-radius:2px;display:inline-block;"></span><span style="color:#450E22;">2024 cohorts</span></div><div class="li"><span style="width:28px;height:2px;background:#8C5B6A;border-radius:2px;display:inline-block;"></span><span style="color:#8C5B6A;">2025 cohorts</span></div><div class="li"><span style="width:28px;height:2px;background:#D3A9B3;border-radius:2px;display:inline-block;"></span><span style="color:#D3A9B3;">2026 cohorts</span></div><div class="li"><span style="width:28px;border-top:2px dashed #8C5B6A;display:inline-block;opacity:.6;"></span><span style="color:#8C5B6A;opacity:.8;">Nov BFCM</span></div><span class="mono" style="font-size:10px;color:#8C5B6A;margin-left:8px;">deviation from avg · pp above/below zero</span></div><div style="position:relative;width:100%;height:400px;"><canvas id="hlC"></canvas></div></div><div id="hlN" class="fn"></div><div style="overflow-x:auto;margin-top:10px;"><table id="hlT" style="width:100%;border-collapse:collapse;font-family:'Courier New',monospace;font-size:10px;color:#44546A;"></table></div></div>
-<div id="t-cv" style="display:none;"><div class="c4" id="cvK"></div><div class="pn"><div class="lg"><div class="li"><span style="width:28px;height:2px;background:#450E22;border-radius:2px;display:inline-block;"></span><span style="color:#450E22;">2024 cohorts</span></div><div class="li"><span style="width:28px;height:2px;background:#8C5B6A;border-radius:2px;display:inline-block;"></span><span style="color:#8C5B6A;">2025 cohorts</span></div><div class="li"><span style="width:28px;height:2px;background:#D3A9B3;border-radius:2px;display:inline-block;"></span><span style="color:#D3A9B3;">2026 cohorts</span></div><div class="li"><span style="width:28px;border-top:2px dashed #333;display:inline-block;opacity:.5;"></span><span style="color:#44546A;opacity:.7;">total avg</span></div></div><div style="position:relative;width:100%;height:420px;"><canvas id="cvC"></canvas></div></div><div id="cvN" class="fn"></div></div>
-<div id="t-tm" style="display:none;"><div class="c3" id="tmK"></div><div class="pn"><div class="lg"><div class="li"><span style="width:28px;border-top:2px dotted #450E22;display:inline-block;"></span><span style="color:#450E22;">NC YoY growth % (left)</span></div><div class="li"><span style="width:28px;height:2.5px;background:#450E22;border-radius:2px;display:inline-block;"></span><span style="color:#450E22;">CAC (£)</span></div><div class="li"><span style="width:28px;height:2px;background:#D3A9B3;border-radius:2px;display:inline-block;"></span><span style="color:#D3A9B3;">TM per transaction (£)</span></div></div><div style="position:relative;width:100%;height:360px;"><canvas id="tmC"></canvas></div></div><div id="tmN" class="fn"></div></div>
-<div id="t-lv" style="display:none;"><div class="c4" id="lvK"></div><div class="pn"><div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:14px;"><div class="lg" style="margin-bottom:0;"><div class="li"><span style="width:28px;height:2px;background:#450E22;border-radius:2px;display:inline-block;"></span><span style="color:#450E22;">2024 (solid=actual, dashed=projected)</span></div><div class="li"><span style="width:28px;height:2px;background:#8C5B6A;border-radius:2px;display:inline-block;"></span><span style="color:#8C5B6A;">2025 cohorts</span></div><div class="li"><span style="width:28px;height:2px;background:#D3A9B3;border-radius:2px;display:inline-block;"></span><span style="color:#D3A9B3;">2026 cohorts</span></div></div><span class="mono" style="font-size:10px;color:#8C5B6A;">M0=£95 · projected scaled to cohort vs avg ratio</span></div><div style="position:relative;width:100%;height:420px;"><canvas id="lvC"></canvas></div></div><div style="overflow-x:auto;margin-top:14px;"><table id="lvT" style="width:100%;border-collapse:collapse;font-family:'Courier New',monospace;font-size:10px;color:#44546A;"></table></div><div id="lvN" class="fn"></div></div>
-<div id="t-cl" style="display:none;"><div class="c4" id="clK"></div><div class="pn"><div class="lg"><div class="li"><span style="width:28px;height:2.5px;background:#450E22;border-radius:2px;display:inline-block;"></span><span style="color:#450E22;">cumulative LTV (£)</span></div><div class="li"><span style="width:28px;border-top:2px dashed #b83030;display:inline-block;"></span><span style="color:#b83030;">CAC £55</span></div><div class="li"><span style="width:28px;height:2px;background:#8C5B6A;border-radius:2px;display:inline-block;"></span><span style="color:#8C5B6A;">LTV:CAC ratio (right)</span></div></div><div style="position:relative;width:100%;height:380px;"><canvas id="clC"></canvas></div><div id="clI" class="ins"></div></div><div style="overflow-x:auto;margin-top:14px;"><table id="clT" style="width:100%;border-collapse:collapse;font-family:'Courier New',monospace;font-size:10px;color:#44546A;"></table></div></div>
-<div id="t-rc" style="display:none;"><div class="c4" id="rcK"></div><div class="pn"><div class="lg"><div class="li"><span style="width:14px;height:14px;background:#8C5B6A;border-radius:2px;display:inline-block;"></span><span style="color:#8C5B6A;">returning customers</span></div><div class="li"><span style="width:28px;height:2px;background:#D3A9B3;border-radius:2px;display:inline-block;"></span><span style="color:#D3A9B3;">YoY % (right)</span></div></div><div style="position:relative;width:100%;height:340px;"><canvas id="rcC"></canvas></div></div><div id="rcN" class="fn"></div></div>
+<!-- LTV TIMELINE -->
+<div id="t-cf">
+  <div class="c3" id="cfK"></div>
+  <div class="pn">
+    <div class="lg">
+      <div class="li"><span style="width:28px;height:2.5px;background:#450E22;border-radius:2px;display:inline-block;"></span><span style="color:#450E22;">2025 avg</span></div>
+      <div class="li"><span style="width:28px;height:2px;background:#8C5B6A;border-radius:2px;display:inline-block;"></span><span style="color:#8C5B6A;">total avg</span></div>
+      <div class="li"><span style="width:28px;height:2px;background:#D3A9B3;border-radius:2px;display:inline-block;"></span><span style="color:#D3A9B3;">2024 avg</span></div>
+      <div class="li"><span style="width:28px;border-top:2px dashed #8C5B6A;display:inline-block;opacity:.7;"></span><span style="color:#8C5B6A;opacity:.8;">cumulative (right)</span></div>
+    </div>
+    <div style="position:relative;width:100%;height:340px;"><canvas id="cfC"></canvas></div>
+  </div>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin:10px 2px 0;">
+    <div id="cfN" class="fn"></div><button class="lnk" onclick="tog('cf')">update data ↓</button>
+  </div>
+  <div id="cfA" style="display:none;"><div class="up2">
+    <div class="mono" style="font-size:11px;color:#450E22;text-transform:uppercase;">Update LTV timeline</div>
+    <div class="ug">
+      <div class="ul2">2024 avg</div><textarea id="cf24" rows="2"></textarea>
+      <div class="ul2">2025 avg</div><textarea id="cf25" rows="2"></textarea>
+      <div class="ul2">Total avg</div><textarea id="cfTt" rows="2"></textarea>
+      <div class="ul2">Cumulative</div><textarea id="cfAc" rows="2"></textarea>
+      <div class="ul2">Updated</div><input class="ui" id="cfDt" type="text" placeholder="e.g. June 2026"/>
+    </div>
+    <div style="display:flex;align-items:center;gap:14px;margin-top:14px;">
+      <button class="sb" onclick="saveCF()">Save &amp; push live</button>
+      <span id="cfM" class="fn"></span>
+    </div>
+  </div></div>
 </div>
 
-<script>
-var MF="'Courier New',monospace";
-var cohTm=75,M0=95,CAC_FIXED=55;
+<!-- NEW CUSTOMERS -->
+<div id="t-nc" style="display:none;">
+  <div class="c4" id="ncK"></div>
+  <div class="pn">
+    <div class="lg">
+      <div class="li"><span style="width:14px;height:14px;background:#450E22;border-radius:2px;display:inline-block;"></span><span style="color:#450E22;">new customers</span></div>
+      <div class="li"><span style="width:28px;height:2px;background:#8C5B6A;border-radius:2px;display:inline-block;"></span><span style="color:#8C5B6A;">YoY % (right)</span></div>
+    </div>
+    <div style="position:relative;width:100%;height:340px;"><canvas id="ncC"></canvas></div>
+  </div>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin:10px 2px 0;">
+    <div id="ncN" class="fn"></div><button class="lnk" onclick="tog('nc')">update data ↓</button>
+  </div>
+  <div id="ncA" style="display:none;"><div class="up2">
+    <div class="mono" style="font-size:11px;color:#450E22;text-transform:uppercase;">Update new customers</div>
+    <div class="ug">
+      <div class="ul2">Months</div><textarea id="ncMo" rows="3"></textarea>
+      <div class="ul2">NC counts</div><textarea id="ncCt" rows="3"></textarea>
+      <div class="ul2">Updated</div><input class="ui" id="ncDt" type="text" placeholder="e.g. June 2026"/>
+    </div>
+    <div style="display:flex;align-items:center;gap:14px;margin-top:14px;">
+      <button class="sb" onclick="saveNC()">Save &amp; push live</button>
+      <span id="ncM" class="fn"></span>
+    </div>
+  </div></div>
+</div>
 
+<!-- AOV -->
+<div id="t-aov" style="display:none;">
+  <div class="c4" id="aovK"></div>
+  <div class="pn">
+    <div class="lg">
+      <div class="li"><span style="width:28px;height:2.5px;background:#450E22;border-radius:2px;display:inline-block;"></span><span style="color:#450E22;">AOV (£)</span></div>
+      <div class="li"><span style="width:28px;border-top:2px dashed #8C5B6A;display:inline-block;opacity:.8;"></span><span style="color:#8C5B6A;opacity:.8;">YoY % (right)</span></div>
+    </div>
+    <div style="position:relative;width:100%;height:340px;"><canvas id="aovC"></canvas></div>
+  </div>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin:10px 2px 0;">
+    <div id="aovN" class="fn"></div><button class="lnk" onclick="tog('aov')">update data ↓</button>
+  </div>
+  <div id="aovA" style="display:none;"><div class="up2">
+    <div class="mono" style="font-size:11px;color:#450E22;text-transform:uppercase;">Update AOV</div>
+    <div class="ug">
+      <div class="ul2">Months</div><textarea id="aovMo" rows="3"></textarea>
+      <div class="ul2">AOV (£)</div><textarea id="aovVl" rows="3"></textarea>
+      <div class="ul2">Updated</div><input class="ui" id="aovDt" type="text" placeholder="e.g. June 2026"/>
+    </div>
+    <div style="display:flex;align-items:center;gap:14px;margin-top:14px;">
+      <button class="sb" onclick="saveAOV()">Save &amp; push live</button>
+      <span id="aovM" class="fn"></span>
+    </div>
+  </div></div>
+</div>
+
+<!-- CAC & SPEND -->
+<div id="t-cac" style="display:none;">
+  <div class="c4" id="cacK"></div>
+  <div class="pn">
+    <div class="lg">
+      <div class="li"><span style="width:14px;height:14px;background:#450E22;border-radius:2px;display:inline-block;"></span><span style="color:#450E22;">new customers (left)</span></div>
+      <div class="li"><span style="width:28px;height:2.5px;background:#8C5B6A;border-radius:2px;display:inline-block;"></span><span style="color:#8C5B6A;">CAC £ (right)</span></div>
+      <div class="li"><span style="width:28px;border-top:2px dotted #450E22;display:inline-block;"></span><span style="color:#450E22;">NC YoY % (right)</span></div>
+      <div class="li"><span style="width:28px;border-top:2px dashed #D3A9B3;display:inline-block;"></span><span style="color:#D3A9B3;">ad fees % (right)</span></div>
+    </div>
+    <div style="position:relative;width:100%;height:340px;"><canvas id="cacC"></canvas></div>
+    <div id="cacI" class="ins"></div>
+  </div>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin:10px 2px 0;">
+    <div id="cacN" class="fn"></div><button class="lnk" onclick="tog('cac')">update data ↓</button>
+  </div>
+  <div id="cacA" style="display:none;"><div class="up2">
+    <div class="mono" style="font-size:11px;color:#450E22;text-transform:uppercase;">Update CAC &amp; spend</div>
+    <div class="ug">
+      <div class="ul2">Months</div><textarea id="cacMo" rows="3"></textarea>
+      <div class="ul2">NC counts</div><textarea id="cacNc" rows="3"></textarea>
+      <div class="ul2">CAC (£)</div><textarea id="cacCc" rows="3"></textarea>
+      <div class="ul2">Ad fees %</div><textarea id="cacAd" rows="3"></textarea>
+      <div class="ul2">Updated</div><input class="ui" id="cacDt" type="text" placeholder="e.g. June 2026"/>
+    </div>
+    <div style="display:flex;align-items:center;gap:14px;margin-top:14px;">
+      <button class="sb" onclick="saveCAC()">Save &amp; push live</button>
+      <span id="cacM" class="fn"></span>
+    </div>
+  </div></div>
+</div>
+
+<!-- 2 YEAR TM PREBOOKED -->
+<div id="t-ltv" style="display:none;">
+  <div class="c3" id="ltvK"></div>
+  <div class="pn">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px;">
+      <div class="lg" style="margin-bottom:0;">
+        <div class="li"><span style="width:14px;height:14px;background:#450E22;border-radius:2px;display:inline-block;"></span><span style="color:#450E22;">banked TM</span></div>
+        <div class="li"><span style="width:14px;height:14px;background:#ECD6DC;border-radius:2px;display:inline-block;"></span><span style="color:#8C5B6A;">predicted to M+28</span></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="mono" style="font-size:10px;color:#8C5B6A;">TM per return visit: <span id="tmV">75</span></span>
+        <input type="range" min="20" max="150" step="5" value="75" style="width:110px;cursor:pointer;accent-color:#450E22;" oninput="cohTm=+this.value;document.getElementById('tmV').textContent=this.value;rLTV();rPB();">
+      </div>
+    </div>
+    <div style="position:relative;width:100%;height:650px;"><canvas id="ltvC"></canvas></div>
+  </div>
+  <div style="overflow-x:auto;margin-top:14px;"><table id="ltvT" style="width:100%;border-collapse:collapse;font-family:'Courier New',monospace;font-size:10px;color:#44546A;"></table></div>
+  <div id="ltvN" class="fn"></div>
+</div>
+
+<!-- TM PRE-BOOKED -->
+<div id="t-pb" style="display:none;">
+  <div class="c4" id="pbK"></div>
+  <div class="pn">
+    <div class="lg">
+      <div class="li"><span style="width:28px;height:2.5px;background:#450E22;border-radius:2px;display:inline-block;"></span><span style="color:#450E22;">TM banked cumulative</span></div>
+      <div class="li"><span style="width:14px;height:14px;background:#ECD6DC;border-radius:2px;display:inline-block;opacity:.8;"></span><span style="color:#8C5B6A;">TM prebooked outstanding</span></div>
+    </div>
+    <div style="position:relative;width:100%;height:360px;"><canvas id="pbC"></canvas></div>
+  </div>
+  <div id="pbN" class="fn"></div>
+</div>
+
+<!-- COHORT HEALTH -->
+<div id="t-hl" style="display:none;">
+  <div class="c4" id="hlK"></div>
+  <div class="pn">
+    <div class="lg">
+      <div class="li"><span style="width:28px;height:2px;background:#450E22;border-radius:2px;display:inline-block;"></span><span style="color:#450E22;">2024 cohorts</span></div>
+      <div class="li"><span style="width:28px;height:2px;background:#8C5B6A;border-radius:2px;display:inline-block;"></span><span style="color:#8C5B6A;">2025 cohorts</span></div>
+      <div class="li"><span style="width:28px;height:2px;background:#D3A9B3;border-radius:2px;display:inline-block;"></span><span style="color:#D3A9B3;">2026 cohorts</span></div>
+      <div class="li"><span style="width:28px;border-top:2px dashed #8C5B6A;display:inline-block;opacity:.6;"></span><span style="color:#8C5B6A;opacity:.8;">Nov BFCM (dashed)</span></div>
+      <span class="mono" style="font-size:10px;color:#8C5B6A;margin-left:8px;">deviation from total avg · pp above/below zero</span>
+    </div>
+    <div style="position:relative;width:100%;height:400px;"><canvas id="hlC"></canvas></div>
+  </div>
+  <div id="hlN" class="fn"></div>
+  <div style="overflow-x:auto;margin-top:10px;"><table id="hlT" style="width:100%;border-collapse:collapse;font-family:'Courier New',monospace;font-size:10px;color:#44546A;"></table></div>
+</div>
+
+<!-- COHORT CURVES -->
+<div id="t-cv" style="display:none;">
+  <div class="c4" id="cvK"></div>
+  <div class="pn">
+    <div class="lg">
+      <div class="li"><span style="width:28px;height:2px;background:#450E22;border-radius:2px;display:inline-block;"></span><span style="color:#450E22;">2024 cohorts</span></div>
+      <div class="li"><span style="width:28px;height:2px;background:#8C5B6A;border-radius:2px;display:inline-block;"></span><span style="color:#8C5B6A;">2025 cohorts</span></div>
+      <div class="li"><span style="width:28px;height:2px;background:#D3A9B3;border-radius:2px;display:inline-block;"></span><span style="color:#D3A9B3;">2026 cohorts</span></div>
+      <div class="li"><span style="width:28px;border-top:2px dashed #333;display:inline-block;opacity:.5;"></span><span style="color:#44546A;opacity:.7;">total average</span></div>
+    </div>
+    <div style="position:relative;width:100%;height:420px;"><canvas id="cvC"></canvas></div>
+  </div>
+  <div id="cvN" class="fn"></div>
+</div>
+
+<!-- TRADING METRICS -->
+<div id="t-tm" style="display:none;">
+  <div class="c4" id="tmK"></div>
+  <div class="pn">
+    <div class="lg">
+      <div class="li"><span style="width:28px;border-top:2px dotted #450E22;display:inline-block;"></span><span style="color:#450E22;">NC YoY growth % (left)</span></div>
+      <div class="li"><span style="width:28px;height:2.5px;background:#450E22;border-radius:2px;display:inline-block;"></span><span style="color:#450E22;">NC CAC (£)</span></div>
+      <div class="li"><span style="width:28px;height:2px;background:#D3A9B3;border-radius:2px;display:inline-block;"></span><span style="color:#D3A9B3;">TM per transaction (£)</span></div>
+    </div>
+    <div style="position:relative;width:100%;height:360px;"><canvas id="tmC"></canvas></div>
+  </div>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin:10px 2px 0;">
+    <div id="tmN" class="fn"></div><button class="lnk" onclick="tog('tm')">update data ↓</button>
+  </div>
+  <div id="tmA" style="display:none;"><div class="up2">
+    <div class="mono" style="font-size:11px;color:#450E22;text-transform:uppercase;">Update trading metrics</div>
+    <div class="ug">
+      <div class="ul2">Months</div><textarea id="tmMo" rows="3"></textarea>
+      <div class="ul2">CAC (£)</div><textarea id="tmCc" rows="3"></textarea>
+      <div class="ul2">AOV (£)</div><textarea id="tmAv" rows="3"></textarea>
+      <div class="ul2">TM (£)</div><textarea id="tmTm" rows="3"></textarea>
+      <div class="ul2">Updated</div><input class="ui" id="tmDt" type="text" placeholder="e.g. June 2026"/>
+    </div>
+    <div style="display:flex;align-items:center;gap:14px;margin-top:14px;">
+      <button class="sb" onclick="saveTM()">Save &amp; push live</button>
+      <span id="tmM" class="fn"></span>
+    </div>
+    <div class="fn" style="margin-top:8px;">No £ signs. Blank entry for missing TM months.</div>
+  </div></div>
+</div>
+
+<!-- LTV VALUATION -->
+<div id="t-lv" style="display:none;">
+  <div class="c4" id="lvK"></div>
+  <div class="pn">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:14px;">
+      <div class="lg" style="margin-bottom:0;">
+        <div class="li"><span style="width:28px;height:2px;background:#450E22;border-radius:2px;display:inline-block;"></span><span style="color:#450E22;">2024 (solid=actual, dashed=projected)</span></div>
+        <div class="li"><span style="width:28px;height:2px;background:#8C5B6A;border-radius:2px;display:inline-block;"></span><span style="color:#8C5B6A;">2025 cohorts</span></div>
+        <div class="li"><span style="width:28px;height:2px;background:#D3A9B3;border-radius:2px;display:inline-block;"></span><span style="color:#D3A9B3;">2026 cohorts</span></div>
+      </div>
+      <span class="mono" style="font-size:10px;color:#8C5B6A;">M0=£95 · projected scaled to cohort vs avg ratio</span>
+    </div>
+    <div style="position:relative;width:100%;height:420px;"><canvas id="lvC"></canvas></div>
+  </div>
+  <div style="overflow-x:auto;margin-top:14px;"><table id="lvT" style="width:100%;border-collapse:collapse;font-family:'Courier New',monospace;font-size:10px;color:#44546A;"></table></div>
+  <div id="lvN" class="fn"></div>
+</div>
+
+<!-- CAC:LTV RATIO -->
+<div id="t-cl" style="display:none;">
+  <div class="c4" id="clK"></div>
+  <div class="pn">
+    <div class="lg">
+      <div class="li"><span style="width:28px;height:2.5px;background:#450E22;border-radius:2px;display:inline-block;"></span><span style="color:#450E22;">cumulative LTV (£)</span></div>
+      <div class="li"><span style="width:28px;border-top:2px dashed #b83030;display:inline-block;"></span><span style="color:#b83030;">CAC £55</span></div>
+      <div class="li"><span style="width:28px;height:2px;background:#8C5B6A;border-radius:2px;display:inline-block;"></span><span style="color:#8C5B6A;">LTV:CAC ratio (right)</span></div>
+    </div>
+    <div style="position:relative;width:100%;height:380px;"><canvas id="clC"></canvas></div>
+    <div id="clI" class="ins"></div>
+  </div>
+  <div style="overflow-x:auto;margin-top:14px;"><table id="clT" style="width:100%;border-collapse:collapse;font-family:'Courier New',monospace;font-size:10px;color:#44546A;"></table></div>
+</div>
+
+<!-- RETURNING CUSTOMERS -->
+<div id="t-rc" style="display:none;">
+  <div class="c3" id="rcK"></div>
+  <div class="pn">
+    <div class="lg">
+      <div class="li"><span style="width:14px;height:14px;background:#8C5B6A;border-radius:2px;display:inline-block;"></span><span style="color:#8C5B6A;">returning customers</span></div>
+      <div class="li"><span style="width:28px;height:2px;background:#D3A9B3;border-radius:2px;display:inline-block;"></span><span style="color:#D3A9B3;">YoY % (right)</span></div>
+    </div>
+    <div style="position:relative;width:100%;height:340px;"><canvas id="rcC"></canvas></div>
+  </div>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin:10px 2px 0;">
+    <div id="rcN" class="fn"></div><button class="lnk" onclick="tog('rc')">update data ↓</button>
+  </div>
+  <div id="rcA" style="display:none;"><div class="up2">
+    <div class="mono" style="font-size:11px;color:#450E22;text-transform:uppercase;">Update returning customers</div>
+    <div class="ug">
+      <div class="ul2">Months</div><textarea id="rcMo" rows="3"></textarea>
+      <div class="ul2">RC counts</div><textarea id="rcCt" rows="3"></textarea>
+      <div class="ul2">Updated</div><input class="ui" id="rcDt" type="text" placeholder="e.g. June 2026"/>
+    </div>
+    <div style="display:flex;align-items:center;gap:14px;margin-top:14px;">
+      <button class="sb" onclick="saveRC()">Save &amp; push live</button>
+      <span id="rcM" class="fn"></span>
+    </div>
+  </div></div>
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+// ── CHARTS ────────────────────────────────────────────────────────────────────
+var chCF,chNC,chAOV,chCAC,chLTV,chPB,chHL,chCV,chTM,chLV,chCL,chRC;
 // ── DATA ──────────────────────────────────────────────────────────────────────
-var dCF={a24:[5.29,3.79,2.19,1.78,1.81,1.53,1.68,1.64,1.58,1.57,1.59,1.62,1.86,1.48,1.54,1.48,1.49,1.58,1.59,1.57,1.68,1.59,1.71,1.28,1.30],a25:[5.93,4.33,2.32,1.82,1.75,1.69,1.67,1.68,1.54,1.61,1.70,1.22,1.02],tot:[5.61,4.06,2.25,1.80,1.79,1.70,1.68,1.65,1.57,1.58,1.61,1.56,1.79,1.48,1.54,1.48,1.49,1.58,1.59,1.57,1.68,1.59,1.71,1.28,1.30],acc:[5.61,9.67,11.92,13.72,15.51,17.20,18.88,20.53,22.10,23.68,25.30,26.85,28.65,30.13,31.67,33.15,34.63,36.21,37.80,39.37,41.05,42.64,44.35,45.63,46.93]};
-var dNC={mo:['Jan 2024','Feb 2024','Mar 2024','Apr 2024','May 2024','Jun 2024','Jul 2024','Aug 2024','Sep 2024','Oct 2024','Nov 2024','Dec 2024','Jan 2025','Feb 2025','Mar 2025','Apr 2025','May 2025','Jun 2025','Jul 2025','Aug 2025','Sep 2025','Oct 2025','Nov 2025','Dec 2025','Jan 2026','Feb 2026','Mar 2026','Apr 2026'],ct:[6053,3243,3120,2822,2747,2533,2872,2804,3065,4865,9096,5225,5252,4697,5297,4091,3919,4524,6101,6698,6881,8682,20928,8857,6776,5214,5323,5097]};
-var dRC={mo:['Jan 2024','Feb 2024','Mar 2024','Apr 2024','May 2024','Jun 2024','Jul 2024','Aug 2024','Sep 2024','Oct 2024','Nov 2024','Dec 2024','Jan 2025','Feb 2025','Mar 2025','Apr 2025','May 2025','Jun 2025','Jul 2025','Aug 2025','Sep 2025','Oct 2025','Nov 2025','Dec 2025','Jan 2026','Feb 2026','Mar 2026','Apr 2026'],ct:[1136,585,669,585,680,610,828,866,799,1257,2545,1654,1653,1254,1541,1220,1301,1499,1894,2036,2251,2543,5925,3116,2605,1865,1959,2146]};
-var dAOV={mo:['Jan 2025','Feb 2025','Mar 2025','Apr 2025','May 2025','Jun 2025','Jul 2025','Aug 2025','Sep 2025','Oct 2025','Nov 2025','Dec 2025','Jan 2026','Feb 2026','Mar 2026','Apr 2026'],vl:[104.05,115.86,121.88,124.00,127.00,129.00,117.00,127.00,138.00,149.70,154.00,138.05,136.37,144.33,152.00,151.00]};
-var dCAC={mo:['Jan 2025','Feb 2025','Mar 2025','Apr 2025','May 2025','Jun 2025','Jul 2025','Aug 2025','Sep 2025','Oct 2025','Nov 2025','Dec 2025','Jan 2026','Feb 2026','Mar 2026','Apr 2026'],nc:[5252,4697,5297,4091,3919,4524,6101,6698,6881,8682,20928,8857,6776,5214,5323,5097],cac:[46.78,39.21,39.18,49.37,42.79,45.57,44.96,51.54,54.89,61.17,70.76,67.83,42.27,46.83,59.59,61.88],ad:[36.00,27.30,25.40,31.70,25.80,27.40,29.70,30.40,30.30,32.10,36.40,46.70,24.60,25.30,31.80,31.90]};
-var dTM={mo:['Jan 2025','Feb 2025','Mar 2025','Apr 2025','May 2025','Jun 2025','Jul 2025','Aug 2025','Sep 2025','Oct 2025','Nov 2025','Dec 2025','Jan 2026','Feb 2026','Mar 2026','Apr 2026'],cac:[46.78,39.21,39.18,49.37,42.79,45.57,44.96,51.54,54.89,61.17,70.76,67.83,42.27,46.83,59.59,61.88],aov:[104.05,115.86,121.88,124.00,127.00,129.00,117.00,127.00,138.00,149.70,154.00,138.05,136.37,144.33,152.00,151.00],tm:[12.01,29.15,33.09,25.52,35.70,33.64,23.95,28.22,30.12,34.19,28.26,-2.95,43.51,44.68,40.12,null]};
-var CM=['Jan 2024','Feb 2024','Mar 2024','Apr 2024','May 2024','Jun 2024','Jul 2024','Aug 2024','Sep 2024','Oct 2024','Nov 2024','Dec 2024','Jan 2025','Feb 2025','Mar 2025','Apr 2025','May 2025','Jun 2025','Jul 2025','Aug 2025','Sep 2025','Oct 2025','Nov 2025','Dec 2025','Jan 2026','Feb 2026','Mar 2026','Apr 2026'];
-var CN=[6140,3309,3368,3425,3105,2922,3332,3291,3522,5553,9927,5805,5759,5225,5893,4573,4360,4980,6613,7296,7474,9378,21931,9481,7326,5653,5775,5482];
-var CR=[[6.2,2.6,1.87,1.74,1.43,0.97,1.35,1.53,1.15,2.06,3.06,1.8,2.36,1.33,1.28,1.22,1.05,1.14,1.56,1.51,1.54,1.46,3.02,1.07,1.3,0.73,0.99,1.12],[4.2,3.74,1.51,1.72,1.2,1.23,1.66,1.54,1.75,2.84,2.2,1.48,1.35,1.39,1.42,1.05,1.17,1.45,1.39,1.08,1.54,2.56,0.78,1.48,1.26,0.84,0.75],[4.57,3.83,2.1,1.48,1.6,1.33,1.12,1.69,3.5,2.1,2.01,1.3,1.66,1.24,1.21,1.18,1.42,1.33,1.45,1.39,2.85,1.45,1.3,0.95,1.0,0.92],[4.81,3.18,1.63,1.57,1.95,1.4,2.36,3.64,1.98,1.78,1.31,1.69,1.13,0.81,1.25,1.57,1.25,1.63,1.6,2.68,1.43,0.87,0.99,0.93,0.84],[5.63,3.25,2.41,1.61,1.54,2.09,4.12,1.54,1.44,1.51,1.41,1.41,1.38,1.22,1.54,1.77,1.64,1.73,2.8,1.61,1.03,0.96,0.93,1.32],[4.55,3.28,2.15,1.67,2.19,3.42,1.33,1.98,0.95,1.36,1.36,1.12,1.77,1.6,1.74,1.54,1.36,2.73,1.19,1.12,0.71,0.75,1.23],[6.36,4.47,1.86,1.95,3.69,1.62,1.92,1.29,1.74,1.14,1.08,1.35,1.59,1.35,1.53,1.29,2.7,1.41,1.17,0.93,1.32,0.93],[5.8,3.28,2.43,2.94,1.64,1.67,1.33,1.45,1.51,1.18,1.3,1.67,1.82,1.51,1.48,3.0,1.45,1.15,1.06,0.97,0.79],[4.96,4.74,3.94,2.07,2.27,1.05,1.61,1.22,0.99,1.47,1.39,1.53,1.76,1.3,3.23,1.16,1.27,0.99,1.13,0.99],[5.6,5.76,2.52,1.94,1.42,1.69,1.11,1.24,1.42,1.08,1.33,1.6,1.76,3.22,1.18,0.99,0.66,0.84,0.84],[5.84,3.9,2.36,1.32,1.59,0.86,0.96,1.26,1.2,1.18,1.2,1.45,3.58,1.73,1.05,0.8,0.83,0.83],[4.87,3.37,1.44,1.34,1.2,1.01,1.2,1.2,1.29,1.11,1.41,2.94,2.06,0.98,0.68,0.72,0.82],[5.13,3.38,2.03,0.95,0.98,1.3,1.09,1.56,1.09,1.58,2.77,1.21,1.02,0.92,0.9,1.0],[5.37,4.34,1.33,1.62,1.24,1.49,1.28,1.41,1.39,2.46,1.05,1.22,0.88,0.88,0.99],[5.51,3.22,2.2,1.49,1.71,1.69,1.69,1.45,2.93,1.11,1.25,0.88,0.88,0.91],[5.27,3.89,1.74,1.74,1.48,1.5,1.48,2.82,1.15,1.29,1.0,0.87,1.07],[5.5,4.08,2.79,1.53,1.67,1.33,3.34,1.58,1.1,0.84,0.94,0.96],[5.46,4.35,2.18,1.94,2.08,3.27,1.56,1.24,0.88,1.04,0.78],[6.3,4.12,2.41,1.85,3.5,1.39,1.22,0.83,0.86,0.84],[6.33,4.29,2.06,3.86,1.53,1.53,0.65,0.84,1.06],[6.3,5.12,4.54,1.71,1.49,1.01,0.94,1.15],[6.61,7.9,2.27,1.48,1.0,0.92,0.93],[7.3,3.97,1.87,0.92,0.98,0.79],[6.02,3.24,1.45,0.84,0.94],[6.37,3.23,1.47,1.2],[5.81,3.41,1.78],[6.52,4.29],[6.05]];
+var dCF,dNC,dRC,dAOV,dCAC,dTM,cohTm=75;
+var MF="'Courier New',monospace";
+var M0=95,CAC_FIXED=55,RC_CAC_PCT=0.07,TM_FIXED=95;
+// ── DEFAULTS ──────────────────────────────────────────────────────────────────
+var D_CF={lastUpdated:'May 2026',
+  a24:[5.29,3.79,2.19,1.78,1.81,1.53,1.68,1.64,1.58,1.57,1.59,1.62,1.86,1.48,1.54,1.48,1.49,1.58,1.59,1.57,1.68,1.59,1.71,1.28,1.30],
+  a25:[5.93,4.33,2.32,1.82,1.75,1.69,1.67,1.68,1.54,1.61,1.70,1.22,1.02],
+  tot:[5.61,4.06,2.25,1.80,1.79,1.70,1.68,1.65,1.57,1.58,1.61,1.56,1.79,1.48,1.54,1.48,1.49,1.58,1.59,1.57,1.68,1.59,1.71,1.28,1.30],
+  acc:[5.61,9.67,11.92,13.72,15.51,17.20,18.88,20.53,22.10,23.68,25.30,26.85,28.65,30.13,31.67,33.15,34.63,36.21,37.80,39.37,41.05,42.64,44.35,45.63,46.93]};
+var D_NC={lastUpdated:'May 2026',
+  mo:['Jan 2024','Feb 2024','Mar 2024','Apr 2024','May 2024','Jun 2024','Jul 2024','Aug 2024','Sep 2024','Oct 2024','Nov 2024','Dec 2024','Jan 2025','Feb 2025','Mar 2025','Apr 2025','May 2025','Jun 2025','Jul 2025','Aug 2025','Sep 2025','Oct 2025','Nov 2025','Dec 2025','Jan 2026','Feb 2026','Mar 2026','Apr 2026','May 2026'],
+  ct:[6053,3243,3120,2822,2747,2533,2872,2804,3065,4865,9096,5225,5252,4697,5297,4091,3919,4524,6101,6698,6881,8682,20928,8857,6776,5214,5323,5097,4381]};
+var D_RC={lastUpdated:'May 2026',
+  mo:['Jan 2024','Feb 2024','Mar 2024','Apr 2024','May 2024','Jun 2024','Jul 2024','Aug 2024','Sep 2024','Oct 2024','Nov 2024','Dec 2024','Jan 2025','Feb 2025','Mar 2025','Apr 2025','May 2025','Jun 2025','Jul 2025','Aug 2025','Sep 2025','Oct 2025','Nov 2025','Dec 2025','Jan 2026','Feb 2026','Mar 2026','Apr 2026','May 2026'],
+  ct:[1136,585,669,585,680,610,828,866,799,1257,2545,1654,1653,1254,1541,1220,1301,1499,1894,2036,2251,2543,5925,3116,2605,1865,1959,2146,2581]};
+var D_AOV={lastUpdated:'May 2026',
+  mo:['Jan 2025','Feb 2025','Mar 2025','Apr 2025','May 2025','Jun 2025','Jul 2025','Aug 2025','Sep 2025','Oct 2025','Nov 2025','Dec 2025','Jan 2026','Feb 2026','Mar 2026','Apr 2026','May 2026'],
+  vl:[104.05,115.86,121.88,124.00,127.00,129.00,117.00,127.00,138.00,149.70,154.00,138.05,136.37,144.33,152.00,151.00,151.79]};
+var D_CAC={lastUpdated:'May 2026',
+  mo:['Jan 2025','Feb 2025','Mar 2025','Apr 2025','May 2025','Jun 2025','Jul 2025','Aug 2025','Sep 2025','Oct 2025','Nov 2025','Dec 2025','Jan 2026','Feb 2026','Mar 2026','Apr 2026','May 2026'],
+  nc:[5252,4697,5297,4091,3919,4524,6101,6698,6881,8682,20928,8857,6776,5214,5323,5097,4381],
+  cac:[44.49,37.04,36.70,46.78,39.84,42.58,42.42,48.84,51.73,58.10,67.71,64.43,38.60,43.22,55.67,57.43,61.74],
+  ad:[36.00,27.30,25.40,31.70,25.80,27.40,29.70,30.40,30.30,32.10,36.40,46.70,24.60,25.30,31.80,31.90,28.20]};
+var D_TM={lastUpdated:'May 2026',
+  mo:['Jan 2025','Feb 2025','Mar 2025','Apr 2025','May 2025','Jun 2025','Jul 2025','Aug 2025','Sep 2025','Oct 2025','Nov 2025','Dec 2025','Jan 2026','Feb 2026','Mar 2026','Apr 2026','May 2026'],
+  cac:[44.49,37.04,36.70,46.78,39.84,42.58,42.42,48.84,51.73,58.10,67.71,64.43,38.60,43.22,55.67,57.43,61.74],
+  aov:[104.05,115.86,121.88,124.00,127.00,129.00,117.00,127.00,138.00,149.70,154.00,138.05,136.37,144.33,152.00,151.00,151.79],
+  tm:[12.01,29.15,33.09,25.52,35.70,33.64,23.95,28.22,30.12,34.19,28.26,-2.95,43.51,44.68,40.12,null,null]};
+// ── COHORT DATA ───────────────────────────────────────────────────────────────
+var CM=['Jan 2024','Feb 2024','Mar 2024','Apr 2024','May 2024','Jun 2024','Jul 2024','Aug 2024','Sep 2024','Oct 2024','Nov 2024','Dec 2024','Jan 2025','Feb 2025','Mar 2025','Apr 2025','May 2025','Jun 2025','Jul 2025','Aug 2025','Sep 2025','Oct 2025','Nov 2025','Dec 2025','Jan 2026','Feb 2026','Mar 2026','Apr 2026','May 2026'];
+var CN=[6140,3309,3368,3425,3105,2922,3332,3291,3522,5553,9927,5805,5759,5225,5893,4573,4360,4980,6613,7296,7474,9378,21931,9481,7326,5653,5775,5482,4381];
+var CR=[
+  [6.2,2.6,1.87,1.74,1.43,0.97,1.35,1.53,1.15,2.06,3.06,1.8,2.36,1.33,1.28,1.22,1.05,1.14,1.56,1.51,1.54,1.46,3.02,1.07,1.3,0.73,0.99,1.12],
+  [4.2,3.74,1.51,1.72,1.2,1.23,1.66,1.54,1.75,2.84,2.2,1.48,1.35,1.39,1.42,1.05,1.17,1.45,1.39,1.08,1.54,2.56,0.78,1.48,1.26,0.84,0.75],
+  [4.57,3.83,2.1,1.48,1.6,1.33,1.12,1.69,3.5,2.1,2.01,1.3,1.66,1.24,1.21,1.18,1.42,1.33,1.45,1.39,2.85,1.45,1.3,0.95,1.0,0.92],
+  [4.81,3.18,1.63,1.57,1.95,1.4,2.36,3.64,1.98,1.78,1.31,1.69,1.13,0.81,1.25,1.57,1.25,1.63,1.6,2.68,1.43,0.87,0.99,0.93,0.84],
+  [5.63,3.25,2.41,1.61,1.54,2.09,4.12,1.54,1.44,1.51,1.41,1.41,1.38,1.22,1.54,1.77,1.64,1.73,2.8,1.61,1.03,0.96,0.93,1.32],
+  [4.55,3.28,2.15,1.67,2.19,3.42,1.33,1.98,0.95,1.36,1.36,1.12,1.77,1.6,1.74,1.54,1.36,2.73,1.19,1.12,0.71,0.75,1.23],
+  [6.36,4.47,1.86,1.95,3.69,1.62,1.92,1.29,1.74,1.14,1.08,1.35,1.59,1.35,1.53,1.29,2.7,1.41,1.17,0.93,1.32,0.93],
+  [5.8,3.28,2.43,2.94,1.64,1.67,1.33,1.45,1.51,1.18,1.3,1.67,1.82,1.51,1.48,3.0,1.45,1.15,1.06,0.97,0.79],
+  [4.96,4.74,3.94,2.07,2.27,1.05,1.61,1.22,0.99,1.47,1.39,1.53,1.76,1.3,3.23,1.16,1.27,0.99,1.13,0.99],
+  [5.6,5.76,2.52,1.94,1.42,1.69,1.11,1.24,1.42,1.08,1.33,1.6,1.76,3.22,1.18,0.99,0.66,0.84,0.84],
+  [5.84,3.9,2.36,1.32,1.59,0.86,0.96,1.26,1.2,1.18,1.2,1.45,3.58,1.73,1.05,0.8,0.83,0.83],
+  [4.87,3.37,1.44,1.34,1.2,1.01,1.2,1.2,1.29,1.11,1.41,2.94,2.06,0.98,0.68,0.72,0.82],
+  [5.13,3.38,2.03,0.95,0.98,1.3,1.09,1.56,1.09,1.58,2.77,1.21,1.02,0.92,0.9,1.0],
+  [5.37,4.34,1.33,1.62,1.24,1.49,1.28,1.41,1.39,2.46,1.05,1.22,0.88,0.88,0.99],
+  [5.51,3.22,2.2,1.49,1.71,1.69,1.69,1.45,2.93,1.11,1.25,0.88,0.88,0.91],
+  [5.27,3.89,1.74,1.74,1.48,1.5,1.48,2.82,1.15,1.29,1.0,0.87,1.07],
+  [5.5,4.08,2.79,1.53,1.67,1.33,3.34,1.58,1.1,0.84,0.94,0.96],
+  [5.46,4.35,2.18,1.94,2.08,3.27,1.56,1.24,0.88,1.04,0.78,1.02],
+  [6.3,4.12,2.41,1.85,3.5,1.39,1.22,0.83,0.86,0.84,0.8],
+  [6.33,4.29,2.06,3.86,1.53,1.53,0.65,0.84,1.06,0.67],
+  [6.3,5.12,4.54,1.71,1.49,1.01,0.94,1.15,0.92],
+  [6.61,7.9,2.27,1.48,1.0,0.92,0.93,0.74],
+  [7.3,3.97,1.87,0.92,0.98,0.79,0.81],
+  [6.02,3.24,1.45,0.84,0.94,0.81],
+  [6.37,3.23,1.47,1.2,0.98],
+  [5.81,3.41,1.78,1.14],
+  [6.52,4.29,1.69],
+  [6.05,3.81],
+  [6.79]
+];
 var AVG=[5.39,3.81,2.17,1.71,1.72,1.38,1.52,1.54,1.49,1.51,1.6,1.67,2.1,1.54,1.36,1.23,1.18,1.25,1.39,1.38,1.43,1.31,1.59,1.13,1.13,0.81,0.91,1.12];
 
 // ── HELPERS ───────────────────────────────────────────────────────────────────
-function cCol(m){var yr=parseInt(m.split(' ')[1]);var yc=[];for(var i=0;i<CM.length;i++){if(CM[i].indexOf(String(yr))>-1)yc.push(CM[i]);}var frac=yc.length>1?yc.indexOf(m)/(yc.length-1):0.5;var r,g,b;if(yr===2024){r=Math.round(69+40*frac);g=Math.round(14+30*frac);b=Math.round(34+30*frac);}else if(yr===2025){r=Math.round(140+56*frac);g=Math.round(91+69*frac);b=Math.round(106+60*frac);}else{r=Math.round(211+29*frac);g=Math.round(169+45*frac);b=Math.round(179+41*frac);}return 'rgb('+r+','+g+','+b+')';}
-function ttO(fn){return{backgroundColor:'white',borderColor:'#D3A9B3',borderWidth:1,titleColor:'#450E22',bodyColor:'#8C5B6A',titleFont:{family:MF,size:11},bodyFont:{family:MF,size:11},padding:10,callbacks:{label:fn}};}
-function txO(e){var o={font:{family:MF,size:9},color:'#8C5B6A'};if(e){var k=Object.keys(e);for(var i=0;i<k.length;i++)o[k[i]]=e[k[i]];}return o;}
-function ttl(t){return{display:true,text:t,font:{family:MF,size:9},color:'#8C5B6A'};}
-function byC(id){var e=Chart.getChart(document.getElementById(id));if(e)e.destroy();}
-function kpi4(id,counts,months,lbl,fmt){var n=counts.length,lat=counts[n-1],mo=months[n-1];var p12=n>12?counts[n-13]:null;var yoy=p12!==null?((lat-p12)/p12*100):null;var tot=0;for(var i=0;i<counts.length;i++)tot+=counts[i];var pk=0;for(var i=1;i<counts.length;i++){if(counts[i]>counts[pk])pk=i;}var yh=yoy!==null?('<span class="'+(yoy>=0?'up':'dn')+'">'+(yoy>=0?'+':'')+yoy.toFixed(1)+'%</span>'):'—';document.getElementById(id).innerHTML='<div class="card"><div class="cl">Latest '+lbl+'</div><div class="cv">'+fmt(lat)+'</div><div class="cs">'+mo+'</div></div><div class="card"><div class="cl">YoY change</div><div class="cv" style="font-size:22px;">'+yh+'</div><div class="cs">vs '+(n>12?months[n-13]:'prior year')+'</div></div><div class="card"><div class="cl">Total tracked</div><div class="cv">'+tot.toLocaleString()+'</div><div class="cs">'+months[0]+' \u2013 '+mo+'</div></div><div class="card"><div class="cl">Peak month</div><div class="cv">'+fmt(counts[pk])+'</div><div class="cs">'+months[pk]+'</div></div>';return{n:n,mo:mo};}
-function barYoY(cid,months,counts,barC,lineC,barLbl,yTtl){byC(cid);var yoy=[];for(var i=0;i<counts.length;i++){yoy.push(i<12?null:parseFloat(((counts[i]-counts[i-12])/counts[i-12]*100).toFixed(1)));}return new Chart(document.getElementById(cid),{type:'bar',data:{labels:months,datasets:[{label:barLbl,data:counts,backgroundColor:barC,borderRadius:3,yAxisID:'y',order:2},{label:'YoY',data:yoy,type:'line',borderColor:lineC,backgroundColor:'transparent',borderWidth:2,pointRadius:3,pointBackgroundColor:lineC,tension:0.3,spanGaps:false,yAxisID:'y2',order:1}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:ttO(function(c){if(c.datasetIndex===0)return '  '+barLbl+': '+c.parsed.y.toLocaleString();if(c.parsed.y===null)return null;return '  YoY: '+(c.parsed.y>=0?'+':'')+c.parsed.y.toFixed(1)+'%';})},scales:{x:{grid:{color:'#F5EDF0'},ticks:txO({maxRotation:45,autoSkip:true,maxTicksLimit:12})},y:{position:'left',min:0,grid:{color:'#F5EDF0'},ticks:txO({callback:function(v){return v.toLocaleString();}}),title:ttl(yTtl)},y2:{position:'right',grid:{drawOnChartArea:false},ticks:txO({callback:function(v){return v+'%';}}),title:ttl('YoY %')}}}});}
+function cCol(m) {
+  var yr=parseInt(m.split(' ')[1]);
+  var yc=[];
+  for(var i=0;i<CM.length;i++){if(CM[i].indexOf(String(yr))>-1)yc.push(CM[i]);}
+  var frac=yc.length>1?yc.indexOf(m)/(yc.length-1):0.5;
+  var r,g,b;
+  if(yr===2024){r=Math.round(69+40*frac);g=Math.round(14+30*frac);b=Math.round(34+30*frac);}
+  else if(yr===2025){r=Math.round(140+56*frac);g=Math.round(91+69*frac);b=Math.round(106+60*frac);}
+  else{r=Math.round(211+29*frac);g=Math.round(169+45*frac);b=Math.round(179+41*frac);}
+  return 'rgb('+r+','+g+','+b+')';
+}
+function ttOpts(labelFn) {
+  return {
+    backgroundColor:'white',borderColor:'#D3A9B3',borderWidth:1,
+    titleColor:'#450E22',bodyColor:'#8C5B6A',
+    titleFont:{family:MF,size:11},bodyFont:{family:MF,size:11},
+    padding:10,callbacks:{label:labelFn}
+  };
+}
+function txOpts(extra) {
+  var o={font:{family:MF,size:9},color:'#8C5B6A'};
+  if(extra){var ks=Object.keys(extra);for(var i=0;i<ks.length;i++)o[ks[i]]=extra[ks[i]];}
+  return o;
+}
+function ttlOpts(txt) {return{display:true,text:txt,font:{family:MF,size:9},color:'#8C5B6A'};}
+function kpi4(id,counts,months,lbl,fmt) {
+  var n=counts.length,lat=counts[n-1],mo=months[n-1];
+  var p12=n>12?counts[n-13]:null;
+  var yoy=p12!==null?((lat-p12)/p12*100):null;
+  var tot=0;for(var i=0;i<counts.length;i++)tot+=counts[i];
+  var pk=0;for(var i=1;i<counts.length;i++){if(counts[i]>counts[pk])pk=i;}
+  var yh=yoy!==null?('<span class="'+(yoy>=0?'up':'dn')+'">'+(yoy>=0?'+':'')+yoy.toFixed(1)+'%</span>'):'—';
+  document.getElementById(id).innerHTML=
+    '<div class="card"><div class="cl">Latest '+lbl+'</div><div class="cv">'+fmt(lat)+'</div><div class="cs">'+mo+'</div></div>'+
+    '<div class="card"><div class="cl">YoY change</div><div class="cv" style="font-size:22px;">'+yh+'</div><div class="cs">vs '+(n>12?months[n-13]:'prior year')+'</div></div>'+
+    '<div class="card"><div class="cl">Total tracked</div><div class="cv">'+tot.toLocaleString()+'</div><div class="cs">'+months[0]+' \u2013 '+mo+'</div></div>'+
+    '<div class="card"><div class="cl">Peak month</div><div class="cv">'+fmt(counts[pk])+'</div><div class="cs">'+months[pk]+'</div></div>';
+  return {n:n,mo:mo};
+}
+function byChart(canvasId) {
+  var ex=Chart.getChart(document.getElementById(canvasId));
+  if(ex)ex.destroy();
+}
+function barYoY(canvasId,months,counts,barC,lineC,barLbl,yTtl) {
+  byChart(canvasId);
+  var yoy=[];
+  for(var i=0;i<counts.length;i++){
+    yoy.push(i<12?null:parseFloat(((counts[i]-counts[i-12])/counts[i-12]*100).toFixed(1)));
+  }
+  return new Chart(document.getElementById(canvasId),{
+    type:'bar',
+    data:{
+      labels:months,
+      datasets:[
+        {label:barLbl,data:counts,backgroundColor:barC,borderRadius:3,yAxisID:'y',order:2},
+        {label:'YoY',data:yoy,type:'line',borderColor:lineC,backgroundColor:'transparent',borderWidth:2,pointRadius:3,pointBackgroundColor:lineC,tension:0.3,spanGaps:false,yAxisID:'y2',order:1}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      interaction:{mode:'index',intersect:false},
+      plugins:{
+        legend:{display:false},
+        tooltip:ttOpts(function(c){
+          if(c.datasetIndex===0)return '  '+barLbl+': '+c.parsed.y.toLocaleString();
+          if(c.parsed.y===null)return null;
+          return '  YoY: '+(c.parsed.y>=0?'+':'')+c.parsed.y.toFixed(1)+'%';
+        })
+      },
+      scales:{
+        x:{grid:{color:'#F5EDF0'},ticks:txOpts({maxRotation:45,autoSkip:true,maxTicksLimit:12})},
+        y:{position:'left',min:0,grid:{color:'#F5EDF0'},ticks:txOpts({callback:function(v){return v.toLocaleString();}}),title:ttlOpts(yTtl)},
+        y2:{position:'right',grid:{drawOnChartArea:false},ticks:txOpts({callback:function(v){return v+'%';}}),title:ttlOpts('YoY %')}
+      }
+    }
+  });
+}
 
-// ── RENDERS ───────────────────────────────────────────────────────────────────
-function rCF(){var a24=dCF.a24,a25=dCF.a25,tot=dCF.tot,acc=dCF.acc;var pp=(a25[0]-a24[0]).toFixed(2),sg=parseFloat(pp)>=0?'+':'';document.getElementById('cfK').innerHTML='<div class="card"><div class="cl">Cumulative by M+4</div><div class="cv">'+acc[3].toFixed(2)+'%</div><div class="cs">total return by M+4</div></div><div class="card"><div class="cl">2025 vs 2024 at M+1</div><div class="cv">'+sg+pp+'pp</div><div class="cs">'+a25[0].toFixed(2)+'% vs '+a24[0].toFixed(2)+'%</div></div><div class="card"><div class="cl">'+acc.length+'-month cumulative</div><div class="cv">'+acc[acc.length-1].toFixed(2)+'%</div><div class="cs">of new customers return</div></div>';document.getElementById('cfN').textContent='2025 data M+1 to M+'+a25.length+'. Total avg reflects full '+tot.length+'-month window.';var mM=Math.max(a24.length,tot.length,acc.length);var lbs=[];for(var i=1;i<=mM;i++)lbs.push('M+'+i);var d25=a25.slice();while(d25.length<mM)d25.push(null);byC('cfC');new Chart(document.getElementById('cfC'),{type:'line',data:{labels:lbs,datasets:[{label:'2025',data:d25,borderColor:'#450E22',backgroundColor:'transparent',borderWidth:2.5,pointRadius:3,pointBackgroundColor:'#450E22',tension:0.35,spanGaps:false,yAxisID:'y'},{label:'Total',data:tot,borderColor:'#8C5B6A',backgroundColor:'transparent',borderWidth:2,pointRadius:2,pointBackgroundColor:'#8C5B6A',tension:0.35,yAxisID:'y'},{label:'2024',data:a24,borderColor:'#D3A9B3',backgroundColor:'transparent',borderWidth:1.5,pointRadius:2,pointBackgroundColor:'#D3A9B3',tension:0.35,yAxisID:'y'},{label:'Cumul',data:acc,borderColor:'#8C5B6A',backgroundColor:'transparent',borderWidth:1.5,borderDash:[5,4],pointRadius:0,tension:0.4,yAxisID:'y2'}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:ttO(function(c){if(c.parsed.y===null)return null;return '  '+c.dataset.label+': '+c.parsed.y.toFixed(2)+'%'+(c.datasetIndex===3?' (cumul.)':'');})},scales:{x:{grid:{color:'#F5EDF0'},ticks:txO({maxRotation:0,autoSkip:true,maxTicksLimit:13})},y:{position:'left',min:0,grid:{color:'#F5EDF0'},ticks:txO({callback:function(v){return v+'%';}}),title:ttl('monthly return %')},y2:{position:'right',min:0,grid:{drawOnChartArea:false},ticks:txO({callback:function(v){return v+'%';}}),title:ttl('cumulative %')}}}});}
-function rNC(){var res=kpi4('ncK',dNC.ct,dNC.mo,'NCs',function(v){return v.toLocaleString();});document.getElementById('ncN').textContent=res.n+' months \u00b7 '+dNC.mo[0]+' to '+res.mo;barYoY('ncC',dNC.mo,dNC.ct,'#450E22','#8C5B6A','New customers','new customers');}
-function rRC(){var res=kpi4('rcK',dRC.ct,dRC.mo,'RCs',function(v){return v.toLocaleString();});document.getElementById('rcN').textContent=res.n+' months \u00b7 '+dRC.mo[0]+' to '+res.mo;barYoY('rcC',dRC.mo,dRC.ct,'#8C5B6A','#D3A9B3','Returning customers','returning customers');}
-function rAOV(){var vl=dAOV.vl,mo=dAOV.mo,n=vl.length,lat=vl[n-1];var p12=n>12?vl[n-13]:null,yoy=p12!==null?((lat-p12)/p12*100):null;var pk=0;for(var i=1;i<vl.length;i++){if(vl[i]>vl[pk])pk=i;}var avg=0;for(var i=0;i<vl.length;i++)avg+=vl[i];avg=avg/n;var yh=yoy!==null?('<span class="'+(yoy>=0?'up':'dn')+'">'+(yoy>=0?'+':'')+yoy.toFixed(1)+'%</span>'):'—';document.getElementById('aovK').innerHTML='<div class="card"><div class="cl">Latest AOV</div><div class="cv">\u00a3'+lat.toFixed(2)+'</div><div class="cs">'+mo[n-1]+'</div></div><div class="card"><div class="cl">YoY change</div><div class="cv" style="font-size:22px;">'+yh+'</div><div class="cs">vs '+(n>12?mo[n-13]:'prior year')+'</div></div><div class="card"><div class="cl">Peak AOV</div><div class="cv">\u00a3'+vl[pk].toFixed(2)+'</div><div class="cs">'+mo[pk]+'</div></div><div class="card"><div class="cl">Period avg</div><div class="cv">\u00a3'+avg.toFixed(2)+'</div><div class="cs">'+mo[0]+' \u2013 '+mo[n-1]+'</div></div>';document.getElementById('aovN').textContent=n+' months \u00b7 '+mo[0]+' to '+mo[n-1];var ya=[];for(var i=0;i<vl.length;i++){ya.push(i<12?null:parseFloat(((vl[i]-vl[i-12])/vl[i-12]*100).toFixed(1)));}byC('aovC');new Chart(document.getElementById('aovC'),{type:'line',data:{labels:mo,datasets:[{label:'AOV',data:vl,borderColor:'#450E22',backgroundColor:'rgba(69,14,34,0.06)',fill:true,borderWidth:2.5,pointRadius:3,pointBackgroundColor:'#450E22',tension:0.3,yAxisID:'y',order:2},{label:'YoY',data:ya,borderColor:'#8C5B6A',backgroundColor:'transparent',borderWidth:2,borderDash:[5,4],pointRadius:3,pointBackgroundColor:'#8C5B6A',tension:0.3,spanGaps:false,yAxisID:'y2',order:1}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:ttO(function(c){if(c.datasetIndex===0)return '  AOV: \u00a3'+c.parsed.y.toFixed(2);if(c.parsed.y===null)return null;return '  YoY: '+(c.parsed.y>=0?'+':'')+c.parsed.y.toFixed(1)+'%';})},scales:{x:{grid:{color:'#F5EDF0'},ticks:txO({maxRotation:45,autoSkip:true,maxTicksLimit:12})},y:{position:'left',grid:{color:'#F5EDF0'},ticks:txO({callback:function(v){return '\u00a3'+v;}}),title:ttl('AOV (\u00a3)')},y2:{position:'right',grid:{drawOnChartArea:false},ticks:txO({callback:function(v){return v+'%';}}),title:ttl('YoY %')}}}});}
-function rCAC(){var mo=dCAC.mo,nc=dCAC.nc,cac=dCAC.cac,ad=dCAC.ad,n=mo.length;var ny=n>12?((nc[n-1]-nc[n-13])/nc[n-13]*100):null;var yh=ny!==null?('<span class="'+(ny>=0?'up':'dn')+'">'+(ny>=0?'+':'')+ny.toFixed(1)+'%</span>'):'—';document.getElementById('cacK').innerHTML='<div class="card"><div class="cl">Latest NCs</div><div class="cv">'+nc[n-1].toLocaleString()+'</div><div class="cs">'+mo[n-1]+'</div></div><div class="card"><div class="cl">Latest CAC</div><div class="cv">\u00a3'+cac[n-1].toFixed(2)+'</div><div class="cs">'+mo[n-1]+'</div></div><div class="card"><div class="cl">Latest ad fees</div><div class="cv">'+ad[n-1].toFixed(1)+'%</div><div class="cs">'+mo[n-1]+'</div></div><div class="card"><div class="cl">NC YoY growth</div><div class="cv" style="font-size:22px;">'+yh+'</div><div class="cs">vs '+(n>12?mo[n-13]:'prior year')+'</div></div>';document.getElementById('cacN').textContent=n+' months \u00b7 '+mo[0]+' to '+mo[n-1];var pk=0;for(var i=1;i<cac.length;i++){if(cac[i]>cac[pk])pk=i;}var lk=0;for(var i=1;i<cac.length;i++){if(cac[i]<cac[lk])lk=i;}document.getElementById('cacI').textContent='Peak spend: '+mo[pk]+' \u2014 CAC \u00a3'+cac[pk].toFixed(2)+', ad fees '+ad[pk]+'% \u2192 '+nc[pk].toLocaleString()+' NCs. Lowest CAC: '+mo[lk]+' \u2014 \u00a3'+cac[lk].toFixed(2)+' \u2192 '+nc[lk].toLocaleString()+' NCs.';var ya=[];for(var i=0;i<nc.length;i++){ya.push(i<12?null:parseFloat(((nc[i]-nc[i-12])/nc[i-12]*100).toFixed(1)));}var nMax=Math.ceil(Math.max.apply(null,nc)/5000)*5000;var allR=cac.concat(ad);var yaF=[];for(var i=0;i<ya.length;i++){if(ya[i]!==null)yaF.push(ya[i]);}allR=allR.concat(yaF);var rMax=Math.ceil(Math.max.apply(null,allR)/10)*10+10;var rMin=Math.floor(Math.min.apply(null,yaF.concat([0]))/10)*10-5;byC('cacC');new Chart(document.getElementById('cacC'),{type:'bar',data:{labels:mo,datasets:[{label:'NCs',data:nc,backgroundColor:'rgba(69,14,34,0.75)',borderRadius:3,yAxisID:'y',order:4},{label:'CAC',data:cac,type:'line',borderColor:'#8C5B6A',backgroundColor:'transparent',borderWidth:2.5,pointRadius:3,pointBackgroundColor:'#8C5B6A',tension:0.3,yAxisID:'y2',order:1},{label:'NC YoY',data:ya,type:'line',borderColor:'#450E22',backgroundColor:'transparent',borderWidth:2,borderDash:[3,3],pointRadius:3,pointBackgroundColor:'#450E22',tension:0.3,spanGaps:false,yAxisID:'y2',order:2},{label:'Ad fees',data:ad,type:'line',borderColor:'#D3A9B3',backgroundColor:'transparent',borderWidth:2,borderDash:[5,4],pointRadius:3,pointBackgroundColor:'#D3A9B3',tension:0.3,yAxisID:'y2',order:3}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:ttO(function(c){var v=c.parsed.y;if(v===null)return null;if(c.datasetIndex===0)return '  New customers: '+v.toLocaleString();if(c.datasetIndex===1)return '  CAC: \u00a3'+v.toFixed(2);if(c.datasetIndex===2)return '  NC YoY: '+(v>=0?'+':'')+v.toFixed(1)+'%';return '  Ad fees: '+v.toFixed(1)+'%';})},scales:{x:{grid:{color:'#F5EDF0'},ticks:txO({maxRotation:45,autoSkip:true,maxTicksLimit:12})},y:{position:'left',min:0,max:nMax,grid:{color:'#F5EDF0'},ticks:txO({callback:function(v){return v.toLocaleString();}}),title:ttl('new customers')},y2:{position:'right',min:rMin,max:rMax,grid:{drawOnChartArea:false},ticks:txO(),title:ttl('CAC \u00b7 growth \u00b7 fees')}}}});}
-function cohRows(){return CR.map(function(r,i){var k=Math.min(r.length,28);var bp=0;for(var j=0;j<k;j++)bp+=r[j];var pp=0;for(var j=k;j<28;j++)pp+=AVG[j];return{k:k,bp:bp,pp:pp,p28:bp+pp,bGBP:bp/100*cohTm,p28GBP:(bp+pp)/100*cohTm};});}
-function rLTV(){var rows=cohRows(),n=rows.length;var totPred=0;for(var i=0;i<rows.length;i++)totPred+=rows[i].pp/100*cohTm*CN[i];var avgBnk=0;for(var i=0;i<rows.length;i++)avgBnk+=rows[i].bp;avgBnk=avgBnk/n;var bestI=0;for(var i=1;i<rows.length;i++){if(rows[i].bp>rows[bestI].bp)bestI=i;}document.getElementById('ltvK').innerHTML='<div class="card"><div class="cl">Avg banked %</div><div class="cv">'+avgBnk.toFixed(1)+'%</div><div class="cs">across '+n+' cohorts</div></div><div class="card"><div class="cl">Best cohort banked</div><div class="cv">'+rows[bestI].bp.toFixed(1)+'%</div><div class="cs">'+CM[bestI]+'</div></div><div class="card"><div class="cl">Total predicted TM outstanding</div><div class="cv">\u00a3'+Math.round(totPred).toLocaleString('en-GB')+'</div><div class="cs">pink portion \u00b7 all cohorts</div></div>';document.getElementById('ltvN').textContent='Jan 2024 \u2013 Apr 2026 \u00b7 '+n+' cohorts \u00b7 TM per return visit \u00a3'+cohTm;var bnk=[];var proj=[];for(var i=0;i<rows.length;i++){bnk.push(Math.round(CN[i]*rows[i].bp/100*cohTm));proj.push(Math.round(CN[i]*rows[i].pp/100*cohTm));}byC('ltvC');new Chart(document.getElementById('ltvC'),{type:'bar',data:{labels:CM,datasets:[{label:'Banked',data:bnk,backgroundColor:'#450E22',borderRadius:2,stack:'s'},{label:'Predicted',data:proj,backgroundColor:'#ECD6DC',borderRadius:2,stack:'s'}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:ttO(function(c){var r=rows[c.dataIndex],nc=CN[c.dataIndex];if(c.datasetIndex===0)return['  Banked: \u00a3'+(nc*r.bp/100*cohTm).toLocaleString('en-GB',{maximumFractionDigits:0}),'  ('+r.bp.toFixed(2)+'% \u00b7 M+'+r.k+')'];return['  Predicted: \u00a3'+(nc*r.pp/100*cohTm).toLocaleString('en-GB',{maximumFractionDigits:0}),'  28m total: \u00a3'+(nc*r.p28/100*cohTm).toLocaleString('en-GB',{maximumFractionDigits:0})];})},scales:{x:{stacked:true,grid:{color:'#F5EDF0'},ticks:txO({callback:function(v){return '\u00a3'+v.toLocaleString();}}),title:ttl('total cohort TM \u00a3')},y:{stacked:true,grid:{color:'#F5EDF0'},ticks:txO()}}}});var th='padding:5px 8px;border-bottom:1.5px solid #E6CAD0;color:#8C5B6A;font-size:9px;text-transform:uppercase;letter-spacing:1px;text-align:';var td='padding:4px 8px;border-bottom:0.5px solid #F5EDF0;text-align:';var h='<thead><tr><th style="'+th+'left;">Cohort</th><th style="'+th+'right;">NCs</th><th style="'+th+'right;">Months</th><th style="'+th+'right;">Banked %</th><th style="'+th+'right;">Banked \u00a3/cust</th><th style="'+th+'right;">Pred 28m %</th><th style="'+th+'right;">Pred 28m \u00a3/cust</th><th style="'+th+'right;">Total banked \u00a3</th></tr></thead><tbody>';for(var i=0;i<rows.length;i++){var r=rows[i],full=r.k>=28;h+='<tr style="background:'+(i%2===0?'transparent':'#faf6f7')+'"><td style="'+td+'left;font-weight:600;color:#450E22;white-space:nowrap;">'+CM[i]+'</td><td style="'+td+'right;">'+CN[i].toLocaleString()+'</td><td style="'+td+'right;">M+'+r.k+'</td><td style="'+td+'right;color:#450E22;font-weight:500;">'+r.bp.toFixed(2)+'%</td><td style="'+td+'right;">\u00a3'+r.bGBP.toFixed(2)+'</td><td style="'+td+'right;">'+(full?'<span style="color:#8C5B6A;">':'')+r.p28.toFixed(2)+'%'+(full?'</span>':'')+'</td><td style="'+td+'right;">'+(full?'<span style="color:#8C5B6A;">':'<strong>')+'\u00a3'+r.p28GBP.toFixed(2)+(full?'</span>':'</strong>')+'</td><td style="'+td+'right;">\u00a3'+(r.bGBP*CN[i]).toLocaleString('en-GB',{maximumFractionDigits:0})+'</td></tr>';}document.getElementById('ltvT').innerHTML=h+'</tbody>';}
-function rPB(){var n=CM.length,pre=[],bnk=[];for(var T=0;T<n;T++){var p=0,b=0;for(var i=0;i<=T;i++){var k=Math.min(T-i,28);var pp=0;for(var j=k;j<28;j++)pp+=AVG[j];var bp=0;for(var j=0;j<Math.min(CR[i].length,k);j++)bp+=CR[i][j];p+=CN[i]*pp/100*cohTm;b+=CN[i]*bp/100*cohTm;}pre.push(Math.round(p));bnk.push(Math.round(b));}var pk=0;for(var i=1;i<pre.length;i++){if(pre[i]>pre[pk])pk=i;}var pct=(bnk[n-1]/(bnk[n-1]+pre[n-1])*100).toFixed(1);document.getElementById('pbK').innerHTML='<div class="card"><div class="cl">Current prebooked TM</div><div class="cv">\u00a3'+pre[n-1].toLocaleString('en-GB')+'</div><div class="cs">outstanding \u00b7 '+CM[n-1]+'</div></div><div class="card"><div class="cl">Peak prebooked</div><div class="cv">\u00a3'+pre[pk].toLocaleString('en-GB')+'</div><div class="cs">'+CM[pk]+'</div></div><div class="card"><div class="cl">Total TM banked</div><div class="cv">\u00a3'+bnk[n-1].toLocaleString('en-GB')+'</div><div class="cs">cumulative \u00b7 all cohorts</div></div><div class="card"><div class="cl">Banked vs total</div><div class="cv">'+pct+'%</div><div class="cs">of combined 28m TM earned</div></div>';document.getElementById('pbN').textContent='Jan 2024 \u2013 '+CM[n-1]+' \u00b7 '+n+' cohorts \u00b7 TM \u00a3'+cohTm+'/visit';byC('pbC');new Chart(document.getElementById('pbC'),{type:'line',data:{labels:CM,datasets:[{label:'Prebooked',data:pre,borderColor:'#8C5B6A',backgroundColor:'rgba(236,214,220,0.45)',fill:true,borderWidth:2,pointRadius:3,pointBackgroundColor:'#8C5B6A',tension:0.3,order:2},{label:'Banked',data:bnk,borderColor:'#450E22',backgroundColor:'transparent',borderWidth:2.5,pointRadius:3,pointBackgroundColor:'#450E22',tension:0.3,order:1}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:ttO(function(c){var v='\u00a3'+c.parsed.y.toLocaleString('en-GB');return c.datasetIndex===0?'  Prebooked: '+v:'  Banked: '+v;})},scales:{x:{grid:{color:'#F5EDF0'},ticks:txO({maxRotation:45,autoSkip:true,maxTicksLimit:14})},y:{min:0,grid:{color:'#F5EDF0'},ticks:txO({callback:function(v){return '\u00a3'+v.toLocaleString();}}),title:ttl('TM \u00a3')}}}});}
-function rHL(){var avgCum=[];var ac=0;for(var i=0;i<AVG.length;i++){ac+=AVG[i];avgCum.push(parseFloat(ac.toFixed(2)));}var ds=[];for(var i=0;i<CM.length;i++){var r=CR[i],data=[];var cum=0;for(var j=0;j<28;j++){if(j<r.length){cum+=r[j];data.push(parseFloat((cum-avgCum[j]).toFixed(2)));}else data.push(null);}var isBFCM=CM[i].indexOf('Nov')>-1,isJ24=CM[i]==='Jan 2024';ds.push({label:CM[i],data:data,borderColor:cCol(CM[i]),backgroundColor:'transparent',borderWidth:isJ24?3:isBFCM?2:1.5,borderDash:isBFCM?[4,3]:[],pointRadius:isJ24?3:0,pointHoverRadius:5,tension:0.3,spanGaps:false});}ds.push({label:'zero',data:Array(28).fill(0),borderColor:'rgba(0,0,0,0.2)',backgroundColor:'transparent',borderWidth:1.5,borderDash:[4,3],pointRadius:0,tension:0});var m1v=[];for(var i=0;i<CR.length;i++)m1v.push(CR[i][0]-AVG[0]);var abv=0;for(var i=0;i<m1v.length;i++){if(m1v[i]>0)abv++;}var bI=0,wI=0;for(var i=1;i<m1v.length;i++){if(m1v[i]>m1v[bI])bI=i;if(m1v[i]<m1v[wI])wI=i;}var n25=CR[22],n25c=0;for(var i=0;i<n25.length;i++)n25c+=n25[i];var n25d=(n25c-avgCum[n25.length-1]).toFixed(2);document.getElementById('hlK').innerHTML='<div class="card"><div class="cl">Above avg at M+1</div><div class="cv">'+abv+' / '+CM.length+'</div><div class="cs">positive M+1 deviation</div></div><div class="card"><div class="cl">Best M+1 cohort</div><div class="cv">'+CM[bI]+'</div><div class="cs">+'+(CR[bI][0]-AVG[0]).toFixed(2)+'pp vs avg</div></div><div class="card"><div class="cl">Weakest M+1 cohort</div><div class="cv">'+CM[wI]+'</div><div class="cs">'+(CR[wI][0]-AVG[0]).toFixed(2)+'pp vs avg</div></div><div class="card"><div class="cl">Nov 2025 cumul dev</div><div class="cv"><span class="'+(parseFloat(n25d)>=0?'up':'dn')+'">'+(parseFloat(n25d)>=0?'+':'')+n25d+'pp</span></div><div class="cs">vs avg at M+'+n25.length+'</div></div>';document.getElementById('hlN').textContent='Deviation from total avg \u00b7 zero = average \u00b7 above = outperforming \u00b7 actual data only';var lbs=[];for(var i=1;i<=28;i++)lbs.push('M+'+i);byC('hlC');new Chart(document.getElementById('hlC'),{type:'line',data:{labels:lbs,datasets:ds},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'nearest',intersect:false},plugins:{legend:{display:false},tooltip:ttO(function(c){if(c.dataset.label==='zero'||c.parsed.y===null)return null;var idx=CM.indexOf(c.dataset.label);var siz=idx>=0?' ('+CN[idx].toLocaleString()+' NCs)':'';return '  '+c.dataset.label+siz+': '+(c.parsed.y>=0?'+':'')+c.parsed.y.toFixed(2)+'pp (M+'+(c.dataIndex+1)+')';})},scales:{x:{grid:{color:'#F5EDF0'},ticks:txO()},y:{grid:{color:'#F5EDF0'},ticks:txO({callback:function(v){return (v>=0?'+':'')+v+'pp';}}),title:ttl('pp deviation from total avg')}}}});var ths='padding:5px 8px;border-bottom:1.5px solid #E6CAD0;color:#8C5B6A;font-size:9px;text-transform:uppercase;letter-spacing:1px;';var h='<thead><tr>'+['Cohort','NCs','M+1 dev','M+3 cumul','M+6 cumul','Current dev','Months','Status'].map(function(hh,i){return '<th style="'+ths+'text-align:'+(i===0?'left':'right')+'">'+hh+'</th>';}).join('')+'</tr></thead><tbody>';for(var i=0;i<CM.length;i++){var r=CR[i],k=r.length,cum=0;var devs=[];for(var j=0;j<r.length;j++){cum+=r[j];devs.push(parseFloat((cum-avgCum[j]).toFixed(2)));}var d1=(r[0]-AVG[0]).toFixed(2),d3=k>=3?devs[2].toFixed(2):null,d6=k>=6?devs[5].toFixed(2):null,dC=devs[k-1].toFixed(2);var pf=function(v){if(v===null)return '\u2014';var f=parseFloat(v);return '<span class="'+(f>=0?'up':'dn')+'">'+(f>=0?'+':'')+v+'pp</span>';};var tds='padding:4px 8px;border-bottom:0.5px solid #F5EDF0;text-align:';h+='<tr style="background:'+(i%2===0?'transparent':'#faf6f7')+'"><td style="'+tds+'left;font-weight:600;color:#450E22;white-space:nowrap;">'+CM[i]+'</td><td style="'+tds+'right;">'+CN[i].toLocaleString()+'</td><td style="'+tds+'right;">'+pf(d1)+'</td><td style="'+tds+'right;">'+pf(d3)+'</td><td style="'+tds+'right;">'+pf(d6)+'</td><td style="'+tds+'right;">'+pf(dC)+'</td><td style="'+tds+'right;">M+'+k+'</td><td style="'+tds+'right;">'+(parseFloat(dC)>=0?'<span class="up">\u25b2 above</span>':'<span class="dn">\u25bc below</span>')+'</td></tr>';}document.getElementById('hlT').innerHTML=h+'</tbody>';}
-function rCV(){var ds=[];for(var i=0;i<CM.length;i++){var r=CR[i],data=[];var cum=0;for(var j=0;j<28;j++){if(j<r.length){cum+=r[j];data.push(parseFloat(cum.toFixed(2)));}else data.push(null);}var isBFCM=CM[i].indexOf('Nov')>-1,isJ24=CM[i]==='Jan 2024';ds.push({label:CM[i],data:data,borderColor:cCol(CM[i]),backgroundColor:'transparent',borderWidth:isJ24?3:isBFCM?2:1.5,borderDash:isBFCM?[4,3]:[],pointRadius:isJ24?3:0,pointHoverRadius:5,tension:0.3,spanGaps:false});}var avgC=[];var c=0;for(var i=0;i<AVG.length;i++){c+=AVG[i];avgC.push(parseFloat(c.toFixed(2)));}ds.push({label:'Avg',data:avgC,borderColor:'rgba(44,44,44,0.65)',backgroundColor:'transparent',borderWidth:2.5,borderDash:[6,3],pointRadius:0,tension:0.3});var j24c=0;for(var i=0;i<CR[0].length;i++)j24c+=CR[0][i];var w12=[];for(var i=0;i<CR.length;i++){if(CR[i].length>=12)w12.push(i);}var a12=0;for(var i=0;i<w12.length;i++){var s=0;for(var j=0;j<12;j++)s+=CR[w12[i]][j];a12+=s;}a12=a12/w12.length;var b12=w12[0];for(var i=1;i<w12.length;i++){var s1=0,s2=0;for(var j=0;j<12;j++){s1+=CR[w12[i]][j];s2+=CR[b12][j];}if(s1>s2)b12=w12[i];}var n25=CR[22],n25c=0;for(var i=0;i<n25.length;i++)n25c+=n25[i];var avgN=0;for(var i=0;i<n25.length;i++)avgN+=AVG[i];var df=(n25c-avgN).toFixed(2);document.getElementById('cvK').innerHTML='<div class="card"><div class="cl">Jan 2024 cumulative</div><div class="cv">'+j24c.toFixed(2)+'%</div><div class="cs">M+'+CR[0].length+' \u00b7 furthest cohort</div></div><div class="card"><div class="cl">Avg 12m cumulative</div><div class="cv">'+a12.toFixed(2)+'%</div><div class="cs">'+w12.length+' cohorts \u00b7 actual only</div></div><div class="card"><div class="cl">Best 12m cohort</div><div class="cv">'+CM[b12]+'</div><div class="cs">'+(function(){var s=0;for(var j=0;j<12;j++)s+=CR[b12][j];return s.toFixed(2);})()+'% by M+12</div></div><div class="card"><div class="cl">Nov 2025 vs avg (M+'+n25.length+')</div><div class="cv"><span class="'+(parseFloat(df)>=0?'up':'dn')+'">'+(parseFloat(df)>=0?'+':'')+df+'pp</span></div><div class="cs">'+n25c.toFixed(2)+'% vs '+avgN.toFixed(2)+'%</div></div>';document.getElementById('cvN').textContent='Actual data only \u00b7 no projections \u00b7 dashed = Nov BFCM cohorts \u00b7 dark dashed = total avg';var lbs=[];for(var i=1;i<=28;i++)lbs.push('M+'+i);byC('cvC');new Chart(document.getElementById('cvC'),{type:'line',data:{labels:lbs,datasets:ds},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'nearest',intersect:false},plugins:{legend:{display:false},tooltip:ttO(function(c){if(c.parsed.y===null)return null;var idx=CM.indexOf(c.dataset.label);var siz=idx>=0?' ('+CN[idx].toLocaleString()+' NCs)':'';return '  '+c.dataset.label+siz+': '+c.parsed.y.toFixed(2)+'% cumul (M+'+(c.dataIndex+1)+')';})},scales:{x:{grid:{color:'#F5EDF0'},ticks:txO()},y:{min:0,grid:{color:'#F5EDF0'},ticks:txO({callback:function(v){return v+'%';}}),title:ttl('cumulative return rate %')}}}});}
-function rTM(){var mo=dTM.mo,cac=dTM.cac,tm=dTM.tm,n=mo.length;var ncAligned=[];for(var i=0;i<mo.length;i++){var idx=dNC.mo.indexOf(mo[i]);ncAligned.push(idx>=0?dNC.ct[idx]:null);}var ncYoy=[];for(var i=0;i<ncAligned.length;i++){if(ncAligned[i]===null){ncYoy.push(null);continue;}var prev=dNC.mo.indexOf(mo[i]);var prevYoy=prev>=12?dNC.ct[prev-12]:null;ncYoy.push(prevYoy!==null?parseFloat(((ncAligned[i]-prevYoy)/prevYoy*100).toFixed(1)):null);}var latTm=null,tmMo='';for(var i=n-1;i>=0;i--){if(tm[i]!==null&&tm[i]!==undefined){latTm=tm[i];tmMo=mo[i];break;}}var latYoy=null;for(var i=ncYoy.length-1;i>=0;i--){if(ncYoy[i]!==null){latYoy=ncYoy[i];break;}}var yoyHtml=latYoy!==null?('<span class="'+(latYoy>=0?'up':'dn')+'">'+(latYoy>=0?'+':'')+latYoy.toFixed(1)+'%</span>'):'--';document.getElementById('tmK').innerHTML='<div class="card"><div class="cl">NC YoY growth</div><div class="cv">'+yoyHtml+'</div><div class="cs">'+mo[n-1]+'</div></div><div class="card"><div class="cl">Latest CAC</div><div class="cv">\u00a3'+cac[n-1].toFixed(2)+'</div><div class="cs">'+mo[n-1]+'</div></div><div class="card"><div class="cl">Latest TM / transaction</div><div class="cv">'+(latTm!==null?'\u00a3'+latTm.toFixed(2):'--')+'</div><div class="cs">'+tmMo+'</div></div>';document.getElementById('tmN').textContent=n+' months \u00b7 '+mo[0]+' to '+mo[n-1]+' \u00b7 Dec 2025 negative TM due to fee anomaly';var tmC=[];for(var i=0;i<tm.length;i++){tmC.push(tm[i]===undefined?null:tm[i]);}byC('tmC');new Chart(document.getElementById('tmC'),{type:'line',data:{labels:mo,datasets:[{label:'NC YoY',data:ncYoy,borderColor:'#450E22',backgroundColor:'transparent',borderWidth:2,borderDash:[3,3],pointRadius:3,pointBackgroundColor:'#450E22',tension:0.3,spanGaps:false,yAxisID:'y',order:1},{label:'CAC',data:cac,borderColor:'#450E22',backgroundColor:'transparent',borderWidth:2.5,pointRadius:3,pointBackgroundColor:'#450E22',tension:0.3,yAxisID:'y2',order:2},{label:'TM',data:tmC,borderColor:'#D3A9B3',backgroundColor:'transparent',borderWidth:2,pointRadius:3,pointBackgroundColor:'#D3A9B3',tension:0.3,spanGaps:false,yAxisID:'y2',order:3}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:ttO(function(c){if(c.parsed.y===null)return null;if(c.datasetIndex===0)return '  NC YoY: '+(c.parsed.y>=0?'+':'')+c.parsed.y.toFixed(1)+'%';if(c.datasetIndex===1)return '  CAC: \u00a3'+c.parsed.y.toFixed(2);return '  TM: \u00a3'+c.parsed.y.toFixed(2);})},scales:{x:{grid:{color:'#F5EDF0'},ticks:txO({maxRotation:45,autoSkip:true,maxTicksLimit:12})},y:{position:'left',grid:{color:'#F5EDF0'},ticks:txO({callback:function(v){return (v>=0?'+':'')+v+'%';}}),title:ttl('NC YoY growth %')},y2:{position:'right',grid:{drawOnChartArea:false},ticks:txO({callback:function(v){return '\u00a3'+v;}}),title:ttl('\u00a3 per transaction')}}}});}
-function rLV(){var avgCum=[];var ac=0;for(var i=0;i<AVG.length;i++){ac+=AVG[i];avgCum.push(parseFloat(ac.toFixed(4)));}var rows=[];for(var i=0;i<CM.length;i++){var r=CR[i],k=r.length;var cohC=0;for(var j=0;j<k;j++)cohC+=r[j];var ratio=avgCum[k-1]>0?cohC/avgCum[k-1]:1;var ltv=[];ltv.push(M0);var cumP=0;for(var j=1;j<=28;j++){if(j<=k){cumP+=r[j-1];ltv.push(parseFloat((M0+cumP/100*cohTm).toFixed(2)));}else{cumP+=AVG[j-1]*ratio;ltv.push(parseFloat((M0+cumP/100*cohTm).toFixed(2)));}}var conf=k>=12?'High':k>=6?'Medium':k>=3?'Low':'Very low';rows.push({m:CM[i],k:k,ratio:ratio,ltv:ltv,conf:conf});}var avg24=0,avg12=0;for(var i=0;i<rows.length;i++){avg24+=rows[i].ltv[24];avg12+=rows[i].ltv[12];}avg24=avg24/rows.length;avg12=avg12/rows.length;var best24=0,worst24=0;for(var i=1;i<rows.length;i++){if(rows[i].ltv[24]>rows[best24].ltv[24])best24=i;if(rows[i].ltv[24]<rows[worst24].ltv[24])worst24=i;}document.getElementById('lvK').innerHTML='<div class="card"><div class="cl">Avg est 12m LTV</div><div class="cv">\u00a3'+avg12.toFixed(2)+'</div><div class="cs">per customer \u00b7 all cohorts</div></div><div class="card"><div class="cl">Avg est 24m LTV</div><div class="cv">\u00a3'+avg24.toFixed(2)+'</div><div class="cs">per customer \u00b7 all cohorts</div></div><div class="card"><div class="cl">Best 24m LTV cohort</div><div class="cv">'+rows[best24].m+'</div><div class="cs">\u00a3'+rows[best24].ltv[24].toFixed(2)+'/cust \u00b7 '+rows[best24].ratio.toFixed(2)+'\u00d7avg</div></div><div class="card"><div class="cl">Weakest 24m LTV cohort</div><div class="cv">'+rows[worst24].m+'</div><div class="cs">\u00a3'+rows[worst24].ltv[24].toFixed(2)+'/cust \u00b7 '+rows[worst24].ratio.toFixed(2)+'\u00d7avg</div></div>';document.getElementById('lvN').textContent='Bold = fully actual. Tilde = projected using cohort ratio vs avg. TM \u00a3'+cohTm+'/visit.';var lbs=['M0'];for(var i=1;i<=28;i++)lbs.push('M+'+i);var ds=[];for(var i=0;i<rows.length;i++){var rw=rows[i],k=rw.k,color=cCol(rw.m);var actD=[];var projD=[];for(var j=0;j<=28;j++){actD.push(j<=k?rw.ltv[j]:null);projD.push(j>=k?rw.ltv[j]:null);}ds.push({label:rw.m+' A',data:actD,borderColor:color,backgroundColor:'transparent',borderWidth:rw.m==='Jan 2024'?2.5:1.5,pointRadius:rw.m==='Jan 2024'?2:0,pointHoverRadius:4,tension:0.3,spanGaps:false});if(k<28)ds.push({label:rw.m+' P',data:projD,borderColor:color,backgroundColor:'transparent',borderWidth:1.2,borderDash:[4,3],pointRadius:0,pointHoverRadius:4,tension:0.3,spanGaps:false});}byC('lvC');new Chart(document.getElementById('lvC'),{type:'line',data:{labels:lbs,datasets:ds},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'nearest',intersect:false},plugins:{legend:{display:false},tooltip:ttO(function(c){if(c.parsed.y===null)return null;var lbl=c.dataset.label.replace(' A','').replace(' P','');var proj=c.dataset.label.indexOf(' P')>-1;return '  '+lbl+(proj?' (proj)':' (actual)')+': \u00a3'+c.parsed.y.toFixed(2)+' at '+lbs[c.dataIndex];})},scales:{x:{grid:{color:'#F5EDF0'},ticks:txO({maxRotation:45,autoSkip:true,maxTicksLimit:15})},y:{min:80,grid:{color:'#F5EDF0'},ticks:txO({callback:function(v){return '\u00a3'+v;}}),title:ttl('cumulative LTV per customer (\u00a3)')}}}});var ths='padding:5px 8px;border-bottom:1.5px solid #E6CAD0;color:#8C5B6A;font-size:9px;text-transform:uppercase;letter-spacing:1px;';var h='<thead><tr>'+['Cohort','Months','Current Ratio against Average','3m LTV','12m LTV','24m LTV','28m LTV','Confidence'].map(function(hh,i){return '<th style="'+ths+'text-align:'+(i===0?'left':'right')+'">'+hh+'</th>';}).join('')+'</tr></thead><tbody>';var cConf={'High':'#2a6e2a','Medium':'#450E22','Low':'#8C5B6A','Very low':'#b83030'};for(var i=0;i<rows.length;i++){var rw=rows[i];var f3=rw.k>=3,f12=rw.k>=12,f24=rw.k>=24,f28=rw.k>=28;var fl=function(v,act){return (act?'<strong>':'<span style="opacity:.75;">~')+'\u00a3'+v.toFixed(2)+(act?'</strong>':'</span>');};var rc=rw.ratio>=1.05?'<span class="up">':rw.ratio<=0.95?'<span class="dn">':'<span>';var tds='padding:4px 8px;border-bottom:0.5px solid #F5EDF0;text-align:';h+='<tr style="background:'+(i%2===0?'transparent':'#faf6f7')+'"><td style="'+tds+'left;font-weight:600;color:#450E22;white-space:nowrap;">'+rw.m+'</td><td style="'+tds+'right;">M+'+rw.k+'</td><td style="'+tds+'right;">'+rc+rw.ratio.toFixed(3)+'\u00d7</span></td><td style="'+tds+'right;">'+fl(rw.ltv[3],f3)+'</td><td style="'+tds+'right;">'+fl(rw.ltv[12],f12)+'</td><td style="'+tds+'right;">'+fl(rw.ltv[24],f24)+'</td><td style="'+tds+'right;">'+fl(rw.ltv[28],f28)+'</td><td style="'+tds+'right;color:'+cConf[rw.conf]+';font-weight:500;">'+rw.conf+'</td></tr>';}document.getElementById('lvT').innerHTML=h+'</tbody>';}
-function rCL(){var lbs=['M0'];for(var i=1;i<=28;i++)lbs.push('M+'+i);var ltv=[M0];var cumR=0;for(var i=0;i<28;i++){cumR+=AVG[i];ltv.push(parseFloat((M0+cumR/100*cohTm).toFixed(2)));}var ratio=[];for(var i=0;i<ltv.length;i++)ratio.push(parseFloat((ltv[i]/CAC_FIXED).toFixed(3)));var cacLine=Array(29).fill(CAC_FIXED);document.getElementById('clK').innerHTML='<div class="card"><div class="cl">M0 LTV:CAC ratio</div><div class="cv">'+ratio[0].toFixed(2)+':1</div><div class="cs">\u00a3'+M0+' LTV vs \u00a3'+CAC_FIXED+' CAC \u00b7 \u00a340 EBITDA banked at purchase</div></div><div class="card"><div class="cl">12-month LTV:CAC</div><div class="cv">'+ratio[12].toFixed(2)+':1</div><div class="cs">\u00a3'+ltv[12].toFixed(2)+' per customer</div></div><div class="card"><div class="cl">24-month LTV:CAC</div><div class="cv">'+ratio[24].toFixed(2)+':1</div><div class="cs">\u00a3'+ltv[24].toFixed(2)+' per customer</div></div><div class="card"><div class="cl">28-month LTV:CAC</div><div class="cv">'+ratio[28].toFixed(2)+':1</div><div class="cs">\u00a3'+ltv[28].toFixed(2)+' per customer</div></div>';document.getElementById('clI').textContent='CAC of \u00a3'+CAC_FIXED+' is fully recovered in transaction 1 \u2014 the first purchase generates \u00a3'+M0+' trading margin, covering \u00a3'+CAC_FIXED+' CAC with \u00a340 immediately available for EBITDA. Every returning visit after M0 is incremental LTV. At \u00a3'+cohTm+' TM per return visit, a customer is worth \u00a3'+ltv[12].toFixed(2)+' at 12 months, \u00a3'+ltv[24].toFixed(2)+' at 24 months, and \u00a3'+ltv[28].toFixed(2)+' at 28 months.';byC('clC');new Chart(document.getElementById('clC'),{type:'line',data:{labels:lbs,datasets:[{label:'LTV',data:ltv,borderColor:'#450E22',backgroundColor:'rgba(69,14,34,0.07)',fill:true,borderWidth:2.5,pointRadius:2,pointHoverRadius:5,pointBackgroundColor:'#450E22',tension:0.3,yAxisID:'y',order:2},{label:'CAC',data:cacLine,borderColor:'#b83030',backgroundColor:'transparent',borderWidth:1.5,borderDash:[6,4],pointRadius:0,tension:0,yAxisID:'y',order:3},{label:'Ratio',data:ratio,borderColor:'#8C5B6A',backgroundColor:'transparent',borderWidth:2,pointRadius:2,pointHoverRadius:5,pointBackgroundColor:'#8C5B6A',tension:0.3,yAxisID:'y2',order:1}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:ttO(function(c){if(c.datasetIndex===0)return '  Cumulative LTV: \u00a3'+c.parsed.y.toFixed(2);if(c.datasetIndex===1)return '  CAC: \u00a3'+c.parsed.y.toFixed(2);return '  LTV:CAC ratio: '+c.parsed.y.toFixed(2)+':1';})},scales:{x:{grid:{color:'#F5EDF0'},ticks:txO({maxRotation:45,autoSkip:true,maxTicksLimit:16})},y:{position:'left',grid:{color:'#F5EDF0'},ticks:txO({callback:function(v){return '\u00a3'+v;}}),title:ttl('cumulative LTV (\u00a3)')},y2:{position:'right',grid:{drawOnChartArea:false},ticks:txO({callback:function(v){return v+':1';}}),title:ttl('LTV:CAC ratio')}}}});var ms=[0,1,2,3,6,9,12,15,18,21,24,27,28];var ths='padding:5px 8px;border-bottom:1.5px solid #E6CAD0;color:#8C5B6A;font-size:9px;text-transform:uppercase;letter-spacing:1px;';var h='<thead><tr>'+['Month','Cumul LTV','CAC','LTV:CAC','Additional above CAC','vs M0'].map(function(hh,i){return '<th style="'+ths+'text-align:'+(i===0?'left':'right')+'">'+hh+'</th>';}).join('')+'</tr></thead><tbody>';for(var ii=0;ii<ms.length;ii++){var m=ms[ii],lv=ltv[m],rv=ratio[m];var abv=(lv-CAC_FIXED).toFixed(2),vm0=(lv-M0).toFixed(2);var bold=m===0||m===12||m===24||m===28?'font-weight:600;color:#450E22;':'';var tds='padding:4px 8px;border-bottom:0.5px solid #F5EDF0;text-align:';h+='<tr style="background:'+(ii%2===0?'transparent':'#faf6f7')+'"><td style="'+tds+'left;'+bold+'">'+lbs[m]+'</td><td style="'+tds+'right;'+bold+'">\u00a3'+lv.toFixed(2)+'</td><td style="'+tds+'right;">\u00a3'+CAC_FIXED+'</td><td style="'+tds+'right;font-weight:600;color:'+(rv>=3?'#2a6e2a':rv>=2?'#450E22':'#8C5B6A')+';">'+rv.toFixed(2)+':1</td><td style="'+tds+'right;"><span class="up">+\u00a3'+abv+'</span></td><td style="'+tds+'right;">'+(m===0?'\u2014':'<span class="up">+\u00a3'+vm0+'</span>')+'</td></tr>';}document.getElementById('clT').innerHTML=h+'</tbody>';}
+// ── INIT ──────────────────────────────────────────────────────────────────────
+async function init() {
+  var r0,r1,r2,r3,r4,r5;
+  try{r0=await window.storage.get('ltv:shared:cf',true);dCF=r0?JSON.parse(r0.value):D_CF;}catch(e){dCF=D_CF;}
+  try{r1=await window.storage.get('ltv:shared:nc',true);dNC=r1?JSON.parse(r1.value):D_NC;}catch(e){dNC=D_NC;}
+  try{r2=await window.storage.get('ltv:shared:rc',true);dRC=r2?JSON.parse(r2.value):D_RC;}catch(e){dRC=D_RC;}
+  try{r3=await window.storage.get('ltv:shared:aov',true);dAOV=r3?JSON.parse(r3.value):D_AOV;}catch(e){dAOV=D_AOV;}
+  try{r4=await window.storage.get('ltv:shared:cac',true);dCAC=r4?JSON.parse(r4.value):D_CAC;}catch(e){dCAC=D_CAC;}
+  try{r5=await window.storage.get('ltv:shared:tm',true);dTM=r5?JSON.parse(r5.value):D_TM;}catch(e){dTM=D_TM;}
+  if(!dCF||!dCF.a24)dCF=D_CF;
+  if(!dNC||!dNC.mo)dNC=D_NC;
+  if(!dRC||!dRC.mo)dRC=D_RC;
+  if(!dAOV||!dAOV.mo)dAOV=D_AOV;
+  if(!dCAC||!dCAC.mo)dCAC=D_CAC;
+  if(!dTM||!dTM.mo)dTM=D_TM;
+  document.getElementById('hd').textContent='Last updated: '+dCF.lastUpdated;
+  rCF();
+}
+
+// ── LTV TIMELINE ──────────────────────────────────────────────────────────────
+function rCF() {
+  var a24=dCF.a24,a25=dCF.a25,tot=dCF.tot,acc=dCF.acc;
+  var pp=(a25[0]-a24[0]).toFixed(2),sg=parseFloat(pp)>=0?'+':'';
+  document.getElementById('cfK').innerHTML=
+    '<div class="card"><div class="cl">Cumulative by M+4</div><div class="cv">'+acc[3].toFixed(2)+'%</div><div class="cs">total return by M+4</div></div>'+
+    '<div class="card"><div class="cl">2025 vs 2024 at M+1</div><div class="cv">'+sg+pp+'pp</div><div class="cs">'+a25[0].toFixed(2)+'% vs '+a24[0].toFixed(2)+'%</div></div>'+
+    '<div class="card"><div class="cl">'+acc.length+'-month cumulative</div><div class="cv">'+acc[acc.length-1].toFixed(2)+'%</div><div class="cs">of new customers return</div></div>';
+  document.getElementById('cfN').textContent='2025 data M+1 to M+'+a25.length+'. Total avg reflects full '+tot.length+'-month window.';
+  var mM=Math.max(a24.length,tot.length,acc.length);
+  var lbs=[];for(var i=1;i<=mM;i++)lbs.push('M+'+i);
+  var d25=a25.slice();while(d25.length<mM)d25.push(null);
+  byChart('cfC');
+  chCF=new Chart(document.getElementById('cfC'),{
+    type:'line',
+    data:{
+      labels:lbs,
+      datasets:[
+        {label:'2025',data:d25,borderColor:'#450E22',backgroundColor:'transparent',borderWidth:2.5,pointRadius:3,pointBackgroundColor:'#450E22',tension:0.35,spanGaps:false,yAxisID:'y'},
+        {label:'Total',data:tot,borderColor:'#8C5B6A',backgroundColor:'transparent',borderWidth:2,pointRadius:2,pointBackgroundColor:'#8C5B6A',tension:0.35,yAxisID:'y'},
+        {label:'2024',data:a24,borderColor:'#D3A9B3',backgroundColor:'transparent',borderWidth:1.5,pointRadius:2,pointBackgroundColor:'#D3A9B3',tension:0.35,yAxisID:'y'},
+        {label:'Cumul',data:acc,borderColor:'#8C5B6A',backgroundColor:'transparent',borderWidth:1.5,borderDash:[5,4],pointRadius:0,tension:0.4,yAxisID:'y2'}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      interaction:{mode:'index',intersect:false},
+      plugins:{
+        legend:{display:false},
+        tooltip:ttOpts(function(c){
+          if(c.parsed.y===null)return null;
+          return '  '+c.dataset.label+': '+c.parsed.y.toFixed(2)+'%'+(c.datasetIndex===3?' (cumul.)':'');
+        })
+      },
+      scales:{
+        x:{grid:{color:'#F5EDF0'},ticks:txOpts({maxRotation:0,autoSkip:true,maxTicksLimit:13})},
+        y:{position:'left',min:0,grid:{color:'#F5EDF0'},ticks:txOpts({callback:function(v){return v+'%';}}),title:ttlOpts('monthly return %')},
+        y2:{position:'right',min:0,grid:{drawOnChartArea:false},ticks:txOpts({callback:function(v){return v+'%';}}),title:ttlOpts('cumulative %')}
+      }
+    }
+  });
+  document.getElementById('cf24').value=a24.join(', ');
+  document.getElementById('cf25').value=a25.join(', ');
+  document.getElementById('cfTt').value=tot.join(', ');
+  document.getElementById('cfAc').value=acc.join(', ');
+  document.getElementById('cfDt').value=dCF.lastUpdated;
+}
+
+// ── NEW CUSTOMERS ─────────────────────────────────────────────────────────────
+function rNC() {
+  var res=kpi4('ncK',dNC.ct,dNC.mo,'NCs',function(v){return v.toLocaleString();});
+  document.getElementById('ncN').textContent=res.n+' months \u00b7 '+dNC.mo[0]+' to '+res.mo;
+  chNC=barYoY('ncC',dNC.mo,dNC.ct,'#450E22','#8C5B6A','New customers','new customers');
+  document.getElementById('ncMo').value=dNC.mo.join(', ');
+  document.getElementById('ncCt').value=dNC.ct.join(', ');
+  document.getElementById('ncDt').value=dNC.lastUpdated;
+}
+
+// ── RETURNING CUSTOMERS ───────────────────────────────────────────────────────
+function rRC() {
+  var mo=dRC.mo,ct=dRC.ct,n=ct.length;
+  var lat=ct[n-1],latMo=mo[n-1];
+  var p12=n>12?ct[n-13]:null;
+  var yoy=p12!==null?((lat-p12)/p12*100):null;
+  var tot=0;for(var i=0;i<ct.length;i++)tot+=ct[i];
+  var pk=0;for(var i=1;i<ct.length;i++){if(ct[i]>ct[pk])pk=i;}
+  var yh=yoy!==null?('<span class="'+(yoy>=0?'up':'dn')+'">'+(yoy>=0?'+':'')+yoy.toFixed(1)+'%</span>'):'—';
+
+  // RC CAC per head = AOV * 7% for latest month
+  var latAovIdx=dAOV.mo.indexOf(latMo);
+  var latAov=latAovIdx>=0?dAOV.vl[latAovIdx]:null;
+  var rcCacHead=latAov!==null?(latAov*RC_CAC_PCT):null;
+  var rcNet=rcCacHead!==null?(TM_FIXED-rcCacHead):null;
+
+  // Latest NC CAC for comparison
+  var latNcCacIdx=dCAC.mo.indexOf(latMo);
+  var latNcCac=latNcCacIdx>=0?dCAC.cac[latNcCacIdx]:null;
+  var ncNet=latNcCac!==null?(TM_FIXED-latNcCac):null;
+
+  document.getElementById('rcK').innerHTML=
+    '<div class="card"><div class="cl">Latest RCs</div><div class="cv">'+lat.toLocaleString()+'</div><div class="cs">'+latMo+'</div></div>'+
+    '<div class="card"><div class="cl">YoY change</div><div class="cv" style="font-size:22px;">'+yh+'</div><div class="cs">vs '+(n>12?mo[n-13]:'prior year')+'</div></div>'+
+    '<div class="card"><div class="cl">RC CAC / head</div><div class="cv">'+(rcCacHead!==null?'\u00a3'+rcCacHead.toFixed(2):'—')+'</div><div class="cs">'+(latAov!==null?'AOV \u00d7 7% \u00b7 '+latMo:'no AOV data')+'</div></div>'+
+    '<div class="card"><div class="cl">RC net TM / order</div><div class="cv">'+(rcNet!==null?'\u00a3'+rcNet.toFixed(2):'—')+'</div><div class="cs">£95 TM \u2212 RC CAC</div></div>'+
+    '<div class="card"><div class="cl">NC net TM / order</div><div class="cv">'+(ncNet!==null?'\u00a3'+ncNet.toFixed(2):'—')+'</div><div class="cs">£95 TM \u2212 NC CAC</div></div>'+
+    '<div class="card"><div class="cl">Peak RCs</div><div class="cv">'+ct[pk].toLocaleString()+'</div><div class="cs">'+mo[pk]+'</div></div>';
+
+  document.getElementById('rcN').textContent=n+' months \u00b7 '+mo[0]+' to '+latMo+' \u00b7 RC CAC = AOV \u00d7 7% \u00b7 NC CAC net of RC reactivation cost';
+  chRC=barYoY('rcC',mo,ct,'#8C5B6A','#D3A9B3','Returning customers','returning customers');
+  document.getElementById('rcMo').value=mo.join(', ');
+  document.getElementById('rcCt').value=ct.join(', ');
+  document.getElementById('rcDt').value=dRC.lastUpdated;
+}
+
+// ── AOV ───────────────────────────────────────────────────────────────────────
+function rAOV() {
+  var vl=dAOV.vl,mo=dAOV.mo,n=vl.length,lat=vl[n-1];
+  var p12=n>12?vl[n-13]:null,yoy=p12!==null?((lat-p12)/p12*100):null;
+  var pk=0;for(var i=1;i<vl.length;i++){if(vl[i]>vl[pk])pk=i;}
+  var avg=0;for(var i=0;i<vl.length;i++)avg+=vl[i];avg=avg/n;
+  var yh=yoy!==null?('<span class="'+(yoy>=0?'up':'dn')+'">'+(yoy>=0?'+':'')+yoy.toFixed(1)+'%</span>'):'—';
+  document.getElementById('aovK').innerHTML=
+    '<div class="card"><div class="cl">Latest AOV</div><div class="cv">\u00a3'+lat.toFixed(2)+'</div><div class="cs">'+mo[n-1]+'</div></div>'+
+    '<div class="card"><div class="cl">YoY change</div><div class="cv" style="font-size:22px;">'+yh+'</div><div class="cs">vs '+(n>12?mo[n-13]:'prior year')+'</div></div>'+
+    '<div class="card"><div class="cl">Peak AOV</div><div class="cv">\u00a3'+vl[pk].toFixed(2)+'</div><div class="cs">'+mo[pk]+'</div></div>'+
+    '<div class="card"><div class="cl">Period avg</div><div class="cv">\u00a3'+avg.toFixed(2)+'</div><div class="cs">'+mo[0]+' \u2013 '+mo[n-1]+'</div></div>';
+  document.getElementById('aovN').textContent=n+' months \u00b7 '+mo[0]+' to '+mo[n-1];
+  var ya=[];
+  for(var i=0;i<vl.length;i++){
+    ya.push(i<12?null:parseFloat(((vl[i]-vl[i-12])/vl[i-12]*100).toFixed(1)));
+  }
+  byChart('aovC');
+  chAOV=new Chart(document.getElementById('aovC'),{
+    type:'line',
+    data:{
+      labels:mo,
+      datasets:[
+        {label:'AOV',data:vl,borderColor:'#450E22',backgroundColor:'rgba(69,14,34,0.06)',fill:true,borderWidth:2.5,pointRadius:3,pointBackgroundColor:'#450E22',tension:0.3,yAxisID:'y',order:2},
+        {label:'YoY',data:ya,borderColor:'#8C5B6A',backgroundColor:'transparent',borderWidth:2,borderDash:[5,4],pointRadius:3,pointBackgroundColor:'#8C5B6A',tension:0.3,spanGaps:false,yAxisID:'y2',order:1}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      interaction:{mode:'index',intersect:false},
+      plugins:{
+        legend:{display:false},
+        tooltip:ttOpts(function(c){
+          if(c.datasetIndex===0)return '  AOV: \u00a3'+c.parsed.y.toFixed(2);
+          if(c.parsed.y===null)return null;
+          return '  YoY: '+(c.parsed.y>=0?'+':'')+c.parsed.y.toFixed(1)+'%';
+        })
+      },
+      scales:{
+        x:{grid:{color:'#F5EDF0'},ticks:txOpts({maxRotation:45,autoSkip:true,maxTicksLimit:12})},
+        y:{position:'left',grid:{color:'#F5EDF0'},ticks:txOpts({callback:function(v){return '\u00a3'+v;}}),title:ttlOpts('AOV (\u00a3)')},
+        y2:{position:'right',grid:{drawOnChartArea:false},ticks:txOpts({callback:function(v){return v+'%';}}),title:ttlOpts('YoY %')}
+      }
+    }
+  });
+  document.getElementById('aovMo').value=mo.join(', ');
+  document.getElementById('aovVl').value=vl.join(', ');
+  document.getElementById('aovDt').value=dAOV.lastUpdated;
+}
+
+// ── CAC & SPEND ───────────────────────────────────────────────────────────────
+function rCAC() {
+  var mo=dCAC.mo,nc=dCAC.nc,cac=dCAC.cac,ad=dCAC.ad,n=mo.length;
+  var ny=n>12?((nc[n-1]-nc[n-13])/nc[n-13]*100):null;
+  var yh=ny!==null?('<span class="'+(ny>=0?'up':'dn')+'">'+(ny>=0?'+':'')+ny.toFixed(1)+'%</span>'):'—';
+  document.getElementById('cacK').innerHTML=
+    '<div class="card"><div class="cl">Latest NCs</div><div class="cv">'+nc[n-1].toLocaleString()+'</div><div class="cs">'+mo[n-1]+'</div></div>'+
+    '<div class="card"><div class="cl">Latest NC CAC</div><div class="cv">\u00a3'+cac[n-1].toFixed(2)+'</div><div class="cs">net of RC reactivation cost</div></div>'+
+    '<div class="card"><div class="cl">Latest ad fees</div><div class="cv">'+ad[n-1].toFixed(1)+'%</div><div class="cs">'+mo[n-1]+'</div></div>'+
+    '<div class="card"><div class="cl">NC YoY growth</div><div class="cv" style="font-size:22px;">'+yh+'</div><div class="cs">vs '+(n>12?mo[n-13]:'prior year')+'</div></div>';
+  document.getElementById('cacN').textContent=n+' months \u00b7 '+mo[0]+' to '+mo[n-1]+' \u00b7 NC CAC net of 7% RC reactivation cost';
+  var pk=0;for(var i=1;i<cac.length;i++){if(cac[i]>cac[pk])pk=i;}
+  var lk=0;for(var i=1;i<cac.length;i++){if(cac[i]<cac[lk])lk=i;}
+  document.getElementById('cacI').textContent='NC CAC stripped of RC reactivation cost (AOV \u00d7 7% per RC). Peak: '+mo[pk]+' \u2014 NC CAC \u00a3'+cac[pk].toFixed(2)+', ad fees '+ad[pk]+'% \u2192 '+nc[pk].toLocaleString()+' NCs. Lowest NC CAC: '+mo[lk]+' \u2014 \u00a3'+cac[lk].toFixed(2)+' \u2192 '+nc[lk].toLocaleString()+' NCs.';
+  var ya=[];
+  for(var i=0;i<nc.length;i++){
+    ya.push(i<12?null:parseFloat(((nc[i]-nc[i-12])/nc[i-12]*100).toFixed(1)));
+  }
+  var nMax=Math.ceil(Math.max.apply(null,nc)/5000)*5000;
+  var allR=cac.concat(ad);
+  var yaF=[];for(var i=0;i<ya.length;i++){if(ya[i]!==null)yaF.push(ya[i]);}
+  allR=allR.concat(yaF);
+  var rMax=Math.ceil(Math.max.apply(null,allR)/10)*10+10;
+  var yaMin=yaF.length>0?Math.min.apply(null,yaF):0;
+  var rMin=Math.floor(Math.min(yaMin,0)/10)*10-5;
+  byChart('cacC');
+  chCAC=new Chart(document.getElementById('cacC'),{
+    type:'bar',
+    data:{
+      labels:mo,
+      datasets:[
+        {label:'NCs',data:nc,backgroundColor:'rgba(69,14,34,0.75)',borderRadius:3,yAxisID:'y',order:4},
+        {label:'CAC',data:cac,type:'line',borderColor:'#8C5B6A',backgroundColor:'transparent',borderWidth:2.5,pointRadius:3,pointBackgroundColor:'#8C5B6A',tension:0.3,yAxisID:'y2',order:1},
+        {label:'NC YoY',data:ya,type:'line',borderColor:'#450E22',backgroundColor:'transparent',borderWidth:2,borderDash:[3,3],pointRadius:3,pointBackgroundColor:'#450E22',tension:0.3,spanGaps:false,yAxisID:'y2',order:2},
+        {label:'Ad fees',data:ad,type:'line',borderColor:'#D3A9B3',backgroundColor:'transparent',borderWidth:2,borderDash:[5,4],pointRadius:3,pointBackgroundColor:'#D3A9B3',tension:0.3,yAxisID:'y2',order:3}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      interaction:{mode:'index',intersect:false},
+      plugins:{
+        legend:{display:false},
+        tooltip:ttOpts(function(c){
+          var v=c.parsed.y;
+          if(v===null)return null;
+          if(c.datasetIndex===0)return '  New customers: '+v.toLocaleString();
+          if(c.datasetIndex===1)return '  CAC: \u00a3'+v.toFixed(2);
+          if(c.datasetIndex===2)return '  NC YoY: '+(v>=0?'+':'')+v.toFixed(1)+'%';
+          return '  Ad fees: '+v.toFixed(1)+'%';
+        })
+      },
+      scales:{
+        x:{grid:{color:'#F5EDF0'},ticks:txOpts({maxRotation:45,autoSkip:true,maxTicksLimit:12})},
+        y:{position:'left',min:0,max:nMax,grid:{color:'#F5EDF0'},ticks:txOpts({callback:function(v){return v.toLocaleString();}}),title:ttlOpts('new customers')},
+        y2:{position:'right',min:rMin,max:rMax,grid:{drawOnChartArea:false},ticks:txOpts(),title:ttlOpts('CAC \u00b7 growth \u00b7 fees')}
+      }
+    }
+  });
+  document.getElementById('cacMo').value=mo.join(', ');
+  document.getElementById('cacNc').value=nc.join(', ');
+  document.getElementById('cacCc').value=cac.join(', ');
+  document.getElementById('cacAd').value=ad.join(', ');
+  document.getElementById('cacDt').value=dCAC.lastUpdated;
+}
+
+// ── TRADING METRICS ───────────────────────────────────────────────────────────
+function rTM() {
+  var mo=dTM.mo,cac=dTM.cac,aov=dTM.aov,tm=dTM.tm,n=mo.length;
+
+  // Align NC data to trading months
+  var ncAligned=[];
+  for(var i=0;i<mo.length;i++){
+    var idx=dNC.mo.indexOf(mo[i]);
+    ncAligned.push(idx>=0?dNC.ct[idx]:null);
+  }
+  var ncYoy=[];
+  for(var i=0;i<ncAligned.length;i++){
+    if(ncAligned[i]===null){ncYoy.push(null);continue;}
+    var prev=dNC.mo.indexOf(mo[i]);
+    var prevYoy=prev>=12?dNC.ct[prev-12]:null;
+    ncYoy.push(prevYoy!==null?parseFloat(((ncAligned[i]-prevYoy)/prevYoy*100).toFixed(1)):null);
+  }
+
+  var latCac=cac[n-1],latAov=aov[n-1];
+  var latNc=null;for(var i=n-1;i>=0;i--){if(ncAligned[i]!==null){latNc=ncAligned[i];break;}}
+  var latTm=null,tmMo='';
+  for(var i=n-1;i>=0;i--){if(tm[i]!==null&&tm[i]!==undefined){latTm=tm[i];tmMo=mo[i];break;}}
+  var posT=[];
+  for(var i=0;i<tm.length;i++){if(tm[i]!==null&&tm[i]!==undefined&&tm[i]>0)posT.push(tm[i]);}
+  var avgT=0;if(posT.length>0){for(var i=0;i<posT.length;i++)avgT+=posT[i];avgT=avgT/posT.length;}
+
+  // Latest NC YoY
+  var latYoy=null;for(var i=ncYoy.length-1;i>=0;i--){if(ncYoy[i]!==null){latYoy=ncYoy[i];break;}}
+  var yoyHtml=latYoy!==null?('<span class="'+(latYoy>=0?'up':'dn')+'">'+(latYoy>=0?'+':'')+latYoy.toFixed(1)+'%</span>'):'--';
+
+  document.getElementById('tmK').innerHTML=
+    '<div class="card"><div class="cl">NC YoY growth</div><div class="cv">'+yoyHtml+'</div><div class="cs">'+mo[n-1]+'</div></div>'+
+    '<div class="card"><div class="cl">Latest NC CAC</div><div class="cv">\u00a3'+latCac.toFixed(2)+'</div><div class="cs">net of RC reactivation cost</div></div>'+
+    '<div class="card"><div class="cl">NC net TM / order</div><div class="cv">\u00a3'+(TM_FIXED-latCac).toFixed(2)+'</div><div class="cs">\u00a395 TM \u2212 NC CAC</div></div>'+
+    '<div class="card"><div class="cl">Latest TM / transaction</div><div class="cv">'+(latTm!==null?'\u00a3'+latTm.toFixed(2):'--')+'</div><div class="cs">'+tmMo+'</div></div>';
+
+  document.getElementById('tmN').textContent=n+' months \u00b7 '+mo[0]+' to '+mo[n-1]+' \u00b7 Dec 2025 negative TM due to fee anomaly';
+
+  var tmC=[];
+  for(var i=0;i<tm.length;i++){tmC.push(tm[i]===undefined?null:tm[i]);}
+
+  byChart('tmC');
+  chTM=new Chart(document.getElementById('tmC'),{
+    type:'line',
+    data:{
+      labels:mo,
+      datasets:[
+        {label:'NC YoY',data:ncYoy,borderColor:'#450E22',backgroundColor:'transparent',borderWidth:2,borderDash:[3,3],pointRadius:3,pointBackgroundColor:'#450E22',tension:0.3,spanGaps:false,yAxisID:'y',order:1},
+        {label:'CAC',data:cac,borderColor:'#450E22',backgroundColor:'transparent',borderWidth:2.5,pointRadius:3,pointBackgroundColor:'#450E22',tension:0.3,yAxisID:'y2',order:2},
+        {label:'TM',data:tmC,borderColor:'#D3A9B3',backgroundColor:'transparent',borderWidth:2,pointRadius:3,pointBackgroundColor:'#D3A9B3',tension:0.3,spanGaps:false,yAxisID:'y2',order:3}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      interaction:{mode:'index',intersect:false},
+      plugins:{
+        legend:{display:false},
+        tooltip:ttOpts(function(c){
+          if(c.parsed.y===null)return null;
+          if(c.datasetIndex===0)return '  NC YoY: '+(c.parsed.y>=0?'+':'')+c.parsed.y.toFixed(1)+'%';
+          if(c.datasetIndex===1)return '  CAC: \u00a3'+c.parsed.y.toFixed(2);
+          return '  TM: \u00a3'+c.parsed.y.toFixed(2);
+        })
+      },
+      scales:{
+        x:{grid:{color:'#F5EDF0'},ticks:txOpts({maxRotation:45,autoSkip:true,maxTicksLimit:12})},
+        y:{position:'left',grid:{color:'#F5EDF0'},ticks:txOpts({callback:function(v){return (v>=0?'+':'')+v+'%';}}),title:ttlOpts('NC YoY growth %')},
+        y2:{position:'right',grid:{drawOnChartArea:false},ticks:txOpts({callback:function(v){return '\u00a3'+v;}}),title:ttlOpts('\u00a3 per transaction')}
+      }
+    }
+  });
+  document.getElementById('tmMo').value=mo.join(', ');
+  document.getElementById('tmCc').value=cac.join(', ');
+  document.getElementById('tmAv').value=aov.join(', ');
+  document.getElementById('tmTm').value=tmC.map(function(v){return v===null?'':v;}).join(', ');
+  document.getElementById('tmDt').value=dTM.lastUpdated;
+}
+
+// ── 2 YEAR TM PREBOOKED ───────────────────────────────────────────────────────
+function cohRows() {
+  return CR.map(function(r,i){
+    var k=Math.min(r.length,28);
+    var bp=0;for(var j=0;j<k;j++)bp+=r[j];
+    var pp=0;for(var j=k;j<28;j++)pp+=AVG[j];
+    return {k:k,bp:bp,pp:pp,p28:bp+pp,bGBP:bp/100*cohTm,p28GBP:(bp+pp)/100*cohTm};
+  });
+}
+function rLTV() {
+  var rows=cohRows(),n=rows.length;
+  var totPred=0;for(var i=0;i<rows.length;i++)totPred+=rows[i].pp/100*cohTm*CN[i];
+  var avgBnk=0;for(var i=0;i<rows.length;i++)avgBnk+=rows[i].bp;avgBnk=avgBnk/n;
+  var bestI=0;for(var i=1;i<rows.length;i++){if(rows[i].bp>rows[bestI].bp)bestI=i;}
+  document.getElementById('ltvK').innerHTML=
+    '<div class="card"><div class="cl">Avg banked %</div><div class="cv">'+avgBnk.toFixed(1)+'%</div><div class="cs">across '+n+' cohorts</div></div>'+
+    '<div class="card"><div class="cl">Best cohort banked</div><div class="cv">'+rows[bestI].bp.toFixed(1)+'%</div><div class="cs">'+CM[bestI]+'</div></div>'+
+    '<div class="card"><div class="cl">Total predicted TM outstanding</div><div class="cv">\u00a3'+Math.round(totPred).toLocaleString('en-GB')+'</div><div class="cs">pink portion \u00b7 all cohorts</div></div>';
+  document.getElementById('ltvN').textContent='Jan 2024 \u2013 May 2026 \u00b7 '+n+' cohorts \u00b7 TM per return visit \u00a3'+cohTm;
+  var bnk=[];var proj=[];
+  for(var i=0;i<rows.length;i++){
+    bnk.push(Math.round(CN[i]*rows[i].bp/100*cohTm));
+    proj.push(Math.round(CN[i]*rows[i].pp/100*cohTm));
+  }
+  byChart('ltvC');
+  chLTV=new Chart(document.getElementById('ltvC'),{
+    type:'bar',
+    data:{labels:CM,datasets:[
+      {label:'Banked',data:bnk,backgroundColor:'#450E22',borderRadius:2,stack:'s'},
+      {label:'Predicted',data:proj,backgroundColor:'#ECD6DC',borderRadius:2,stack:'s'}
+    ]},
+    options:{
+      indexAxis:'y',responsive:true,maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:ttOpts(function(c){
+          var r=rows[c.dataIndex],nc=CN[c.dataIndex];
+          if(c.datasetIndex===0)return [
+            '  Banked: \u00a3'+(nc*r.bp/100*cohTm).toLocaleString('en-GB',{maximumFractionDigits:0}),
+            '  ('+r.bp.toFixed(2)+'% \u00b7 M+'+r.k+')'
+          ];
+          return [
+            '  Predicted: \u00a3'+(nc*r.pp/100*cohTm).toLocaleString('en-GB',{maximumFractionDigits:0}),
+            '  28m total: \u00a3'+(nc*r.p28/100*cohTm).toLocaleString('en-GB',{maximumFractionDigits:0})
+          ];
+        })
+      },
+      scales:{
+        x:{stacked:true,grid:{color:'#F5EDF0'},ticks:txOpts({callback:function(v){return '\u00a3'+v.toLocaleString();}}),title:ttlOpts('total cohort TM \u00a3 (banked + predicted to M+28)')},
+        y:{stacked:true,grid:{color:'#F5EDF0'},ticks:txOpts()}
+      }
+    }
+  });
+  var th='padding:5px 8px;border-bottom:1.5px solid #E6CAD0;color:#8C5B6A;font-size:9px;text-transform:uppercase;letter-spacing:1px;text-align:';
+  var td='padding:4px 8px;border-bottom:0.5px solid #F5EDF0;text-align:';
+  var h='<thead><tr>'+
+    '<th style="'+th+'left;">Cohort</th><th style="'+th+'right;">NCs</th><th style="'+th+'right;">Months</th>'+
+    '<th style="'+th+'right;">Banked %</th><th style="'+th+'right;">Banked \u00a3/cust</th>'+
+    '<th style="'+th+'right;">Pred 28m %</th><th style="'+th+'right;">Pred 28m \u00a3/cust</th>'+
+    '<th style="'+th+'right;">Total banked \u00a3</th></tr></thead><tbody>';
+  for(var i=0;i<rows.length;i++){
+    var r=rows[i],full=r.k>=28;
+    h+='<tr style="background:'+(i%2===0?'transparent':'#faf6f7')+'">'+
+      '<td style="'+td+'left;font-weight:600;color:#450E22;white-space:nowrap;">'+CM[i]+'</td>'+
+      '<td style="'+td+'right;">'+CN[i].toLocaleString()+'</td>'+
+      '<td style="'+td+'right;">M+'+r.k+'</td>'+
+      '<td style="'+td+'right;color:#450E22;font-weight:500;">'+r.bp.toFixed(2)+'%</td>'+
+      '<td style="'+td+'right;">\u00a3'+r.bGBP.toFixed(2)+'</td>'+
+      '<td style="'+td+'right;">'+(full?'<span style="color:#8C5B6A;">':'')+r.p28.toFixed(2)+'%'+(full?'</span>':'')+'</td>'+
+      '<td style="'+td+'right;">'+(full?'<span style="color:#8C5B6A;">':'<strong>')+'\u00a3'+r.p28GBP.toFixed(2)+(full?'</span>':'</strong>')+'</td>'+
+      '<td style="'+td+'right;">\u00a3'+(r.bGBP*CN[i]).toLocaleString('en-GB',{maximumFractionDigits:0})+'</td></tr>';
+  }
+  var tB=0,tP=0,tG=0,tNC=0;
+  for(var i=0;i<rows.length;i++){tB+=rows[i].bp;tP+=rows[i].p28;tG+=rows[i].bGBP*CN[i];tNC+=CN[i];}
+  h+='<tr style="border-top:2px solid #D3A9B3;font-weight:600;color:#450E22;">'+
+    '<td style="padding:5px 8px;">AVERAGE / TOTAL</td>'+
+    '<td style="padding:5px 8px;text-align:right;">'+tNC.toLocaleString()+'</td>'+
+    '<td style="padding:5px 8px;text-align:right;">\u2014</td>'+
+    '<td style="padding:5px 8px;text-align:right;">'+(tB/n).toFixed(2)+'%</td>'+
+    '<td style="padding:5px 8px;text-align:right;">\u00a3'+(rows.reduce(function(s,r){return s+r.bGBP;},0)/n).toFixed(2)+'</td>'+
+    '<td style="padding:5px 8px;text-align:right;">'+(tP/n).toFixed(2)+'%</td>'+
+    '<td style="padding:5px 8px;text-align:right;">\u00a3'+(rows.reduce(function(s,r){return s+r.p28GBP;},0)/n).toFixed(2)+'</td>'+
+    '<td style="padding:5px 8px;text-align:right;">\u00a3'+Math.round(tG).toLocaleString('en-GB')+'</td></tr></tbody>';
+  document.getElementById('ltvT').innerHTML=h;
+}
+
+// ── TM PRE-BOOKED ─────────────────────────────────────────────────────────────
+function rPB() {
+  var n=CM.length,pre=[],bnk=[];
+  for(var T=0;T<n;T++){
+    var p=0,b=0;
+    for(var i=0;i<=T;i++){
+      var k=Math.min(T-i,28);
+      var pp=0;for(var j=k;j<28;j++)pp+=AVG[j];
+      var bp=0;for(var j=0;j<Math.min(CR[i].length,k);j++)bp+=CR[i][j];
+      p+=CN[i]*pp/100*cohTm;
+      b+=CN[i]*bp/100*cohTm;
+    }
+    pre.push(Math.round(p));bnk.push(Math.round(b));
+  }
+  var pk=0;for(var i=1;i<pre.length;i++){if(pre[i]>pre[pk])pk=i;}
+  var pct=(bnk[n-1]/(bnk[n-1]+pre[n-1])*100).toFixed(1);
+  document.getElementById('pbK').innerHTML=
+    '<div class="card"><div class="cl">Current prebooked TM</div><div class="cv">\u00a3'+pre[n-1].toLocaleString('en-GB')+'</div><div class="cs">outstanding \u00b7 '+CM[n-1]+'</div></div>'+
+    '<div class="card"><div class="cl">Peak prebooked</div><div class="cv">\u00a3'+pre[pk].toLocaleString('en-GB')+'</div><div class="cs">'+CM[pk]+'</div></div>'+
+    '<div class="card"><div class="cl">Total TM banked</div><div class="cv">\u00a3'+bnk[n-1].toLocaleString('en-GB')+'</div><div class="cs">cumulative \u00b7 all cohorts</div></div>'+
+    '<div class="card"><div class="cl">Banked vs total</div><div class="cv">'+pct+'%</div><div class="cs">of combined 28m TM earned</div></div>';
+  document.getElementById('pbN').textContent='Jan 2024 \u2013 '+CM[n-1]+' \u00b7 '+n+' cohorts \u00b7 TM \u00a3'+cohTm+'/visit';
+  byChart('pbC');
+  chPB=new Chart(document.getElementById('pbC'),{
+    type:'line',
+    data:{labels:CM,datasets:[
+      {label:'Prebooked',data:pre,borderColor:'#8C5B6A',backgroundColor:'rgba(236,214,220,0.45)',fill:true,borderWidth:2,pointRadius:3,pointBackgroundColor:'#8C5B6A',tension:0.3,order:2},
+      {label:'Banked',data:bnk,borderColor:'#450E22',backgroundColor:'transparent',borderWidth:2.5,pointRadius:3,pointBackgroundColor:'#450E22',tension:0.3,order:1}
+    ]},
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      interaction:{mode:'index',intersect:false},
+      plugins:{
+        legend:{display:false},
+        tooltip:ttOpts(function(c){
+          var v='\u00a3'+c.parsed.y.toLocaleString('en-GB');
+          return c.datasetIndex===0?'  Prebooked: '+v:'  Banked: '+v;
+        })
+      },
+      scales:{
+        x:{grid:{color:'#F5EDF0'},ticks:txOpts({maxRotation:45,autoSkip:true,maxTicksLimit:14})},
+        y:{min:0,grid:{color:'#F5EDF0'},ticks:txOpts({callback:function(v){return '\u00a3'+v.toLocaleString();}}),title:ttlOpts('TM \u00a3')}
+      }
+    }
+  });
+}
+
+// ── COHORT HEALTH ─────────────────────────────────────────────────────────────
+function rHL() {
+  var avgCum=[];var ac=0;
+  for(var i=0;i<AVG.length;i++){ac+=AVG[i];avgCum.push(parseFloat(ac.toFixed(2)));}
+  var ds=[];
+  for(var i=0;i<CM.length;i++){
+    var r=CR[i],data=[];
+    var cum=0;
+    for(var j=0;j<28;j++){
+      if(j<r.length){cum+=r[j];data.push(parseFloat((cum-avgCum[j]).toFixed(2)));}
+      else data.push(null);
+    }
+    var isBFCM=CM[i].indexOf('Nov')>-1,isJ24=CM[i]==='Jan 2024';
+    ds.push({
+      label:CM[i],data:data,borderColor:cCol(CM[i]),backgroundColor:'transparent',
+      borderWidth:isJ24?3:isBFCM?2:1.5,borderDash:isBFCM?[4,3]:[],
+      pointRadius:isJ24?3:0,pointHoverRadius:5,tension:0.3,spanGaps:false
+    });
+  }
+  ds.push({label:'zero',data:Array(28).fill(0),borderColor:'rgba(0,0,0,0.2)',backgroundColor:'transparent',borderWidth:1.5,borderDash:[4,3],pointRadius:0,tension:0});
+  var m1v=[];for(var i=0;i<CR.length;i++)m1v.push(CR[i][0]-AVG[0]);
+  var abv=0;for(var i=0;i<m1v.length;i++){if(m1v[i]>0)abv++;}
+  var bI=0,wI=0;
+  for(var i=1;i<m1v.length;i++){if(m1v[i]>m1v[bI])bI=i;if(m1v[i]<m1v[wI])wI=i;}
+  var n25=CR[22],n25c=0;for(var i=0;i<n25.length;i++)n25c+=n25[i];
+  var n25d=(n25c-avgCum[n25.length-1]).toFixed(2);
+  document.getElementById('hlK').innerHTML=
+    '<div class="card"><div class="cl">Above avg at M+1</div><div class="cv">'+abv+' / '+CM.length+'</div><div class="cs">positive M+1 deviation</div></div>'+
+    '<div class="card"><div class="cl">Best M+1 cohort</div><div class="cv">'+CM[bI]+'</div><div class="cs">+'+(CR[bI][0]-AVG[0]).toFixed(2)+'pp vs avg</div></div>'+
+    '<div class="card"><div class="cl">Weakest M+1 cohort</div><div class="cv">'+CM[wI]+'</div><div class="cs">'+(CR[wI][0]-AVG[0]).toFixed(2)+'pp vs avg</div></div>'+
+    '<div class="card"><div class="cl">Nov 2025 cumul dev</div><div class="cv"><span class="'+(parseFloat(n25d)>=0?'up':'dn')+'">'+(parseFloat(n25d)>=0?'+':'')+n25d+'pp</span></div><div class="cs">vs avg at M+'+n25.length+'</div></div>';
+  document.getElementById('hlN').textContent='Deviation from total avg \u00b7 zero = average \u00b7 above = outperforming \u00b7 actual data only';
+  var lbs=[];for(var i=1;i<=28;i++)lbs.push('M+'+i);
+  byChart('hlC');
+  chHL=new Chart(document.getElementById('hlC'),{
+    type:'line',data:{labels:lbs,datasets:ds},
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      interaction:{mode:'nearest',intersect:false},
+      plugins:{
+        legend:{display:false},
+        tooltip:ttOpts(function(c){
+          if(c.dataset.label==='zero'||c.parsed.y===null)return null;
+          var idx=CM.indexOf(c.dataset.label);
+          var siz=idx>=0?' ('+CN[idx].toLocaleString()+' NCs)':'';
+          return '  '+c.dataset.label+siz+': '+(c.parsed.y>=0?'+':'')+c.parsed.y.toFixed(2)+'pp (M+'+(c.dataIndex+1)+')';
+        })
+      },
+      scales:{
+        x:{grid:{color:'#F5EDF0'},ticks:txOpts()},
+        y:{grid:{color:'#F5EDF0'},ticks:txOpts({callback:function(v){return (v>=0?'+':'')+v+'pp';}}),title:ttlOpts('pp deviation from total avg')}
+      }
+    }
+  });
+  var ths='padding:5px 8px;border-bottom:1.5px solid #E6CAD0;color:#8C5B6A;font-size:9px;text-transform:uppercase;letter-spacing:1px;';
+  var h='<thead><tr>'+['Cohort','NCs','M+1 dev','M+3 cumul','M+6 cumul','Current dev','Months','Status'].map(function(hh,i){return '<th style="'+ths+'text-align:'+(i===0?'left':'right')+'">'+hh+'</th>';}).join('')+'</tr></thead><tbody>';
+  for(var i=0;i<CM.length;i++){
+    var r=CR[i],k=r.length,cum=0;
+    var devs=[];for(var j=0;j<r.length;j++){cum+=r[j];devs.push(parseFloat((cum-avgCum[j]).toFixed(2)));}
+    var d1=(r[0]-AVG[0]).toFixed(2),d3=k>=3?devs[2].toFixed(2):null,d6=k>=6?devs[5].toFixed(2):null,dC=devs[k-1].toFixed(2);
+    var pf=function(v){if(v===null)return '\u2014';var f=parseFloat(v);return '<span class="'+(f>=0?'up':'dn')+'">'+(f>=0?'+':'')+v+'pp</span>';};
+    var tds='padding:4px 8px;border-bottom:0.5px solid #F5EDF0;text-align:';
+    h+='<tr style="background:'+(i%2===0?'transparent':'#faf6f7')+'">'+
+      '<td style="'+tds+'left;font-weight:600;color:#450E22;white-space:nowrap;">'+CM[i]+'</td>'+
+      '<td style="'+tds+'right;">'+CN[i].toLocaleString()+'</td>'+
+      '<td style="'+tds+'right;">'+pf(d1)+'</td><td style="'+tds+'right;">'+pf(d3)+'</td>'+
+      '<td style="'+tds+'right;">'+pf(d6)+'</td><td style="'+tds+'right;">'+pf(dC)+'</td>'+
+      '<td style="'+tds+'right;">M+'+k+'</td>'+
+      '<td style="'+tds+'right;">'+(parseFloat(dC)>=0?'<span class="up">\u25b2 above</span>':'<span class="dn">\u25bc below</span>')+'</td></tr>';
+  }
+  document.getElementById('hlT').innerHTML=h+'</tbody>';
+}
+
+// ── COHORT CURVES ─────────────────────────────────────────────────────────────
+function rCV() {
+  var ds=[];
+  for(var i=0;i<CM.length;i++){
+    var r=CR[i],data=[];var cum=0;
+    for(var j=0;j<28;j++){
+      if(j<r.length){cum+=r[j];data.push(parseFloat(cum.toFixed(2)));}
+      else data.push(null);
+    }
+    var isBFCM=CM[i].indexOf('Nov')>-1,isJ24=CM[i]==='Jan 2024';
+    ds.push({label:CM[i],data:data,borderColor:cCol(CM[i]),backgroundColor:'transparent',
+      borderWidth:isJ24?3:isBFCM?2:1.5,borderDash:isBFCM?[4,3]:[],
+      pointRadius:isJ24?3:0,pointHoverRadius:5,tension:0.3,spanGaps:false});
+  }
+  var avgC=[];var c=0;for(var i=0;i<AVG.length;i++){c+=AVG[i];avgC.push(parseFloat(c.toFixed(2)));}
+  ds.push({label:'Avg',data:avgC,borderColor:'rgba(44,44,44,0.65)',backgroundColor:'transparent',borderWidth:2.5,borderDash:[6,3],pointRadius:0,tension:0.3});
+  var j24c=0;for(var i=0;i<CR[0].length;i++)j24c+=CR[0][i];
+  var w12=[];for(var i=0;i<CR.length;i++){if(CR[i].length>=12)w12.push(i);}
+  var a12=0;for(var i=0;i<w12.length;i++){var s=0;for(var j=0;j<12;j++)s+=CR[w12[i]][j];a12+=s;}
+  a12=a12/w12.length;
+  var b12=w12[0];for(var i=1;i<w12.length;i++){var s1=0,s2=0;for(var j=0;j<12;j++){s1+=CR[w12[i]][j];s2+=CR[b12][j];}if(s1>s2)b12=w12[i];}
+  var n25=CR[22],n25c=0;for(var i=0;i<n25.length;i++)n25c+=n25[i];
+  var avgN=0;for(var i=0;i<n25.length;i++)avgN+=AVG[i];
+  var df=(n25c-avgN).toFixed(2);
+  document.getElementById('cvK').innerHTML=
+    '<div class="card"><div class="cl">Jan 2024 cumulative</div><div class="cv">'+j24c.toFixed(2)+'%</div><div class="cs">M+'+CR[0].length+' \u00b7 furthest cohort</div></div>'+
+    '<div class="card"><div class="cl">Avg 12m cumulative</div><div class="cv">'+a12.toFixed(2)+'%</div><div class="cs">'+w12.length+' cohorts \u00b7 actual only</div></div>'+
+    '<div class="card"><div class="cl">Best 12m cohort</div><div class="cv">'+CM[b12]+'</div><div class="cs">'+(function(){var s=0;for(var j=0;j<12;j++)s+=CR[b12][j];return s.toFixed(2);})()+'% by M+12</div></div>'+
+    '<div class="card"><div class="cl">Nov 2025 vs avg (M+'+n25.length+')</div><div class="cv"><span class="'+(parseFloat(df)>=0?'up':'dn')+'">'+(parseFloat(df)>=0?'+':'')+df+'pp</span></div><div class="cs">'+n25c.toFixed(2)+'% vs '+avgN.toFixed(2)+'%</div></div>';
+  document.getElementById('cvN').textContent='Actual data only \u00b7 no projections \u00b7 dashed = Nov BFCM cohorts \u00b7 dark dashed = total avg';
+  var lbs=[];for(var i=1;i<=28;i++)lbs.push('M+'+i);
+  byChart('cvC');
+  chCV=new Chart(document.getElementById('cvC'),{
+    type:'line',data:{labels:lbs,datasets:ds},
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      interaction:{mode:'nearest',intersect:false},
+      plugins:{
+        legend:{display:false},
+        tooltip:ttOpts(function(c){
+          if(c.parsed.y===null)return null;
+          var idx=CM.indexOf(c.dataset.label);
+          var siz=idx>=0?' ('+CN[idx].toLocaleString()+' NCs)':'';
+          return '  '+c.dataset.label+siz+': '+c.parsed.y.toFixed(2)+'% cumul (M+'+(c.dataIndex+1)+')';
+        })
+      },
+      scales:{
+        x:{grid:{color:'#F5EDF0'},ticks:txOpts()},
+        y:{min:0,grid:{color:'#F5EDF0'},ticks:txOpts({callback:function(v){return v+'%';}}),title:ttlOpts('cumulative return rate %')}
+      }
+    }
+  });
+}
+
+// ── LTV VALUATION ─────────────────────────────────────────────────────────────
+function rLV() {
+  var avgCum=[];var ac=0;for(var i=0;i<AVG.length;i++){ac+=AVG[i];avgCum.push(parseFloat(ac.toFixed(4)));}
+  var rows=[];
+  for(var i=0;i<CM.length;i++){
+    var r=CR[i],k=r.length;
+    var cohC=0;for(var j=0;j<k;j++)cohC+=r[j];
+    var ratio=avgCum[k-1]>0?cohC/avgCum[k-1]:1;
+    var ltv=[];ltv.push(M0);
+    var cumP=0;
+    for(var j=1;j<=28;j++){
+      if(j<=k){cumP+=r[j-1];ltv.push(parseFloat((M0+cumP/100*cohTm).toFixed(2)));}
+      else{cumP+=AVG[j-1]*ratio;ltv.push(parseFloat((M0+cumP/100*cohTm).toFixed(2)));}
+    }
+    var conf=k>=12?'High':k>=6?'Medium':k>=3?'Low':'Very low';
+    rows.push({m:CM[i],k:k,ratio:ratio,ltv:ltv,conf:conf});
+  }
+  var avg24=0,avg12=0;
+  for(var i=0;i<rows.length;i++){avg24+=rows[i].ltv[24];avg12+=rows[i].ltv[12];}
+  avg24=avg24/rows.length;avg12=avg12/rows.length;
+  var best24=0,worst24=0;
+  for(var i=1;i<rows.length;i++){if(rows[i].ltv[24]>rows[best24].ltv[24])best24=i;if(rows[i].ltv[24]<rows[worst24].ltv[24])worst24=i;}
+  document.getElementById('lvK').innerHTML=
+    '<div class="card"><div class="cl">Avg est 12m LTV</div><div class="cv">\u00a3'+avg12.toFixed(2)+'</div><div class="cs">per customer \u00b7 all cohorts</div></div>'+
+    '<div class="card"><div class="cl">Avg est 24m LTV</div><div class="cv">\u00a3'+avg24.toFixed(2)+'</div><div class="cs">per customer \u00b7 all cohorts</div></div>'+
+    '<div class="card"><div class="cl">Best 24m LTV cohort</div><div class="cv">'+rows[best24].m+'</div><div class="cs">\u00a3'+rows[best24].ltv[24].toFixed(2)+'/cust \u00b7 '+rows[best24].ratio.toFixed(2)+'\u00d7avg</div></div>'+
+    '<div class="card"><div class="cl">Weakest 24m LTV cohort</div><div class="cv">'+rows[worst24].m+'</div><div class="cs">\u00a3'+rows[worst24].ltv[24].toFixed(2)+'/cust \u00b7 '+rows[worst24].ratio.toFixed(2)+'\u00d7avg</div></div>';
+  document.getElementById('lvN').textContent='Bold = fully actual. Tilde = projected using cohort perf ratio vs total avg curve. TM \u00a3'+cohTm+'/visit.';
+  var lbs=['M0'];for(var i=1;i<=28;i++)lbs.push('M+'+i);
+  var ds=[];
+  for(var i=0;i<rows.length;i++){
+    var rw=rows[i],k=rw.k,color=cCol(rw.m);
+    var actD=[];var projD=[];
+    for(var j=0;j<=28;j++){
+      actD.push(j<=k?rw.ltv[j]:null);
+      projD.push(j>=k?rw.ltv[j]:null);
+    }
+    ds.push({label:rw.m+' A',data:actD,borderColor:color,backgroundColor:'transparent',borderWidth:rw.m==='Jan 2024'?2.5:1.5,pointRadius:rw.m==='Jan 2024'?2:0,pointHoverRadius:4,tension:0.3,spanGaps:false});
+    if(k<28)ds.push({label:rw.m+' P',data:projD,borderColor:color,backgroundColor:'transparent',borderWidth:1.2,borderDash:[4,3],pointRadius:0,pointHoverRadius:4,tension:0.3,spanGaps:false});
+  }
+  byChart('lvC');
+  chLV=new Chart(document.getElementById('lvC'),{
+    type:'line',data:{labels:lbs,datasets:ds},
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      interaction:{mode:'nearest',intersect:false},
+      plugins:{
+        legend:{display:false},
+        tooltip:ttOpts(function(c){
+          if(c.parsed.y===null)return null;
+          var lbl=c.dataset.label.replace(' A','').replace(' P','');
+          var proj=c.dataset.label.indexOf(' P')>-1;
+          return '  '+lbl+(proj?' (proj)':' (actual)')+': \u00a3'+c.parsed.y.toFixed(2)+' at '+lbs[c.dataIndex];
+        })
+      },
+      scales:{
+        x:{grid:{color:'#F5EDF0'},ticks:txOpts({maxRotation:45,autoSkip:true,maxTicksLimit:15})},
+        y:{min:80,grid:{color:'#F5EDF0'},ticks:txOpts({callback:function(v){return '\u00a3'+v;}}),title:ttlOpts('cumulative LTV per customer (\u00a3)')}
+      }
+    }
+  });
+  var ths='padding:5px 8px;border-bottom:1.5px solid #E6CAD0;color:#8C5B6A;font-size:9px;text-transform:uppercase;letter-spacing:1px;';
+  var h='<thead><tr>'+['Cohort','Months','Ratio vs avg','12m LTV','24m LTV','28m LTV','Confidence'].map(function(hh,i){return '<th style="'+ths+'text-align:'+(i===0?'left':'right')+'">'+hh+'</th>';}).join('')+'</tr></thead><tbody>';
+  var cConf={'High':'#2a6e2a','Medium':'#450E22','Low':'#8C5B6A','Very low':'#b83030'};
+  for(var i=0;i<rows.length;i++){
+    var rw=rows[i];
+    var f3=rw.k>=3,f12=rw.k>=12,f24=rw.k>=24,f28=rw.k>=28;
+    var fl=function(v,act){return (act?'<strong>':'<span style="opacity:.75;">~')+'\u00a3'+v.toFixed(2)+(act?'</strong>':'</span>');};
+    var rc=rw.ratio>=1.05?'<span class="up">':rw.ratio<=0.95?'<span class="dn">':'<span>';
+    var tds='padding:4px 8px;border-bottom:0.5px solid #F5EDF0;text-align:';
+    h+='<tr style="background:'+(i%2===0?'transparent':'#faf6f7')+'">'+
+      '<td style="'+tds+'left;font-weight:600;color:#450E22;white-space:nowrap;">'+rw.m+'</td>'+
+      '<td style="'+tds+'right;">M+'+rw.k+'</td>'+
+      '<td style="'+tds+'right;">'+rc+rw.ratio.toFixed(3)+'\u00d7</span></td>'+
+      '<td style="'+tds+'right;">'+fl(rw.ltv[3],f3)+'</td>'+
+      '<td style="'+tds+'right;">'+fl(rw.ltv[12],f12)+'</td>'+
+      '<td style="'+tds+'right;">'+fl(rw.ltv[24],f24)+'</td>'+
+      '<td style="'+tds+'right;">'+fl(rw.ltv[28],f28)+'</td>'+
+      '<td style="'+tds+'right;color:'+cConf[rw.conf]+';font-weight:500;">'+rw.conf+'</td></tr>';
+  }
+  document.getElementById('lvT').innerHTML=h+'</tbody>';
+}
+
+// ── CAC:LTV RATIO ─────────────────────────────────────────────────────────────
+function rCL() {
+  var lbs=['M0'];for(var i=1;i<=28;i++)lbs.push('M+'+i);
+  var ltv=[M0];var cumR=0;
+  for(var i=0;i<28;i++){cumR+=AVG[i];ltv.push(parseFloat((M0+cumR/100*cohTm).toFixed(2)));}
+  var ratio=[];for(var i=0;i<ltv.length;i++)ratio.push(parseFloat((ltv[i]/CAC_FIXED).toFixed(3)));
+  var cacLine=Array(29).fill(CAC_FIXED);
+  document.getElementById('clK').innerHTML=
+    '<div class="card"><div class="cl">M0 LTV:CAC ratio</div><div class="cv">'+ratio[0].toFixed(2)+':1</div><div class="cs">\u00a3'+M0+' LTV vs \u00a3'+CAC_FIXED+' CAC \u00b7 \u00a340 EBITDA banked at purchase</div></div>'+
+    '<div class="card"><div class="cl">12-month LTV:CAC</div><div class="cv">'+ratio[12].toFixed(2)+':1</div><div class="cs">\u00a3'+ltv[12].toFixed(2)+' per customer</div></div>'+
+    '<div class="card"><div class="cl">24-month LTV:CAC</div><div class="cv">'+ratio[24].toFixed(2)+':1</div><div class="cs">\u00a3'+ltv[24].toFixed(2)+' per customer</div></div>'+
+    '<div class="card"><div class="cl">28-month LTV:CAC</div><div class="cv">'+ratio[28].toFixed(2)+':1</div><div class="cs">\u00a3'+ltv[28].toFixed(2)+' per customer</div></div>';
+  document.getElementById('clI').textContent='NC CAC of \u00a3'+CAC_FIXED+' (illustrative blended) is fully recovered in transaction 1 \u2014 the first purchase generates \u00a3'+M0+' trading margin, covering NC CAC with \u00a340 immediately available for EBITDA. RC reactivation cost is separately modelled at AOV \u00d7 7% per returning customer. Every returning visit after M0 is incremental LTV. At \u00a3'+cohTm+' TM per return visit, a customer is worth \u00a3'+ltv[12].toFixed(2)+' at 12 months, \u00a3'+ltv[24].toFixed(2)+' at 24 months, and \u00a3'+ltv[28].toFixed(2)+' at 28 months.';
+  byChart('clC');
+  chCL=new Chart(document.getElementById('clC'),{
+    type:'line',
+    data:{labels:lbs,datasets:[
+      {label:'LTV',data:ltv,borderColor:'#450E22',backgroundColor:'rgba(69,14,34,0.07)',fill:true,borderWidth:2.5,pointRadius:2,pointHoverRadius:5,pointBackgroundColor:'#450E22',tension:0.3,yAxisID:'y',order:2},
+      {label:'CAC',data:cacLine,borderColor:'#b83030',backgroundColor:'transparent',borderWidth:1.5,borderDash:[6,4],pointRadius:0,tension:0,yAxisID:'y',order:3},
+      {label:'Ratio',data:ratio,borderColor:'#8C5B6A',backgroundColor:'transparent',borderWidth:2,pointRadius:2,pointHoverRadius:5,pointBackgroundColor:'#8C5B6A',tension:0.3,yAxisID:'y2',order:1}
+    ]},
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      interaction:{mode:'index',intersect:false},
+      plugins:{
+        legend:{display:false},
+        tooltip:ttOpts(function(c){
+          if(c.datasetIndex===0)return '  Cumulative LTV: \u00a3'+c.parsed.y.toFixed(2);
+          if(c.datasetIndex===1)return '  CAC: \u00a3'+c.parsed.y.toFixed(2);
+          return '  LTV:CAC ratio: '+c.parsed.y.toFixed(2)+':1';
+        })
+      },
+      scales:{
+        x:{grid:{color:'#F5EDF0'},ticks:txOpts({maxRotation:45,autoSkip:true,maxTicksLimit:16})},
+        y:{position:'left',grid:{color:'#F5EDF0'},ticks:txOpts({callback:function(v){return '\u00a3'+v;}}),title:ttlOpts('cumulative LTV (\u00a3)')},
+        y2:{position:'right',grid:{drawOnChartArea:false},ticks:txOpts({callback:function(v){return v+':1';}}),title:ttlOpts('LTV:CAC ratio')}
+      }
+    }
+  });
+  var ms=[0,1,2,3,6,9,12,15,18,21,24,27,28];
+  var ths='padding:5px 8px;border-bottom:1.5px solid #E6CAD0;color:#8C5B6A;font-size:9px;text-transform:uppercase;letter-spacing:1px;';
+  var h='<thead><tr>'+['Month','Cumul LTV','CAC','LTV:CAC','Additional above CAC','vs M0'].map(function(hh,i){return '<th style="'+ths+'text-align:'+(i===0?'left':'right')+'">'+hh+'</th>';}).join('')+'</tr></thead><tbody>';
+  for(var ii=0;ii<ms.length;ii++){
+    var m=ms[ii],lv=ltv[m],rv=ratio[m];
+    var abv=(lv-CAC_FIXED).toFixed(2),vm0=(lv-M0).toFixed(2);
+    var bold=m===0||m===12||m===24||m===28?'font-weight:600;color:#450E22;':'';
+    var tds='padding:4px 8px;border-bottom:0.5px solid #F5EDF0;text-align:';
+    h+='<tr style="background:'+(ii%2===0?'transparent':'#faf6f7')+'">'+
+      '<td style="'+tds+'left;'+bold+'">'+lbs[m]+'</td>'+
+      '<td style="'+tds+'right;'+bold+'">\u00a3'+lv.toFixed(2)+'</td>'+
+      '<td style="'+tds+'right;">\u00a3'+CAC_FIXED+'</td>'+
+      '<td style="'+tds+'right;font-weight:600;color:'+(rv>=3?'#2a6e2a':rv>=2?'#450E22':'#8C5B6A')+';">'+rv.toFixed(2)+':1</td>'+
+      '<td style="'+tds+'right;"><span class="up">+\u00a3'+abv+'</span></td>'+
+      '<td style="'+tds+'right;">'+(m===0?'\u2014':'<span class="up">+\u00a3'+vm0+'</span>')+'</td></tr>';
+  }
+  document.getElementById('clT').innerHTML=h+'</tbody>';
+}
 
 // ── TABS ──────────────────────────────────────────────────────────────────────
 var TABS=['cf','nc','aov','cac','ltv','pb','hl','cv','tm','lv','cl','rc'];
-function sw(t){document.querySelectorAll('.tb').forEach(function(b){b.classList.toggle('active',b.dataset.t===t);});for(var i=0;i<TABS.length;i++){document.getElementById('t-'+TABS[i]).style.display=TABS[i]===t?'block':'none';}setTimeout(function(){if(t==='nc')rNC();else if(t==='aov')rAOV();else if(t==='cac')rCAC();else if(t==='ltv')rLTV();else if(t==='pb')rPB();else if(t==='hl')rHL();else if(t==='cv')rCV();else if(t==='tm')rTM();else if(t==='lv')rLV();else if(t==='cl')rCL();else if(t==='rc')rRC();else if(t==='cf')rCF();},50);}
+function sw(t) {
+  document.querySelectorAll('.tb').forEach(function(b){b.classList.toggle('active',b.dataset.t===t);});
+  for(var i=0;i<TABS.length;i++){document.getElementById('t-'+TABS[i]).style.display=TABS[i]===t?'block':'none';}
+  setTimeout(function(){
+    if(t==='nc')rNC();
+    else if(t==='aov')rAOV();
+    else if(t==='cac')rCAC();
+    else if(t==='ltv')rLTV();
+    else if(t==='pb')rPB();
+    else if(t==='hl')rHL();
+    else if(t==='cv')rCV();
+    else if(t==='tm')rTM();
+    else if(t==='lv')rLV();
+    else if(t==='cl')rCL();
+    else if(t==='rc')rRC();
+    else if(t==='cf'&&chCF)chCF.resize();
+  },50);
+}
+function tog(w) {
+  var a=document.getElementById(w==='cf'?'cfA':w==='nc'?'ncA':w==='aov'?'aovA':w==='cac'?'cacA':w==='rc'?'rcA':'tmA');
+  var open=a.style.display==='none';a.style.display=open?'block':'none';
+  var btn=document.querySelector('[onclick="tog(\''+w+'\')"]');
+  if(btn)btn.textContent=open?'close \u2191':'update data \u2193';
+}
+function flash(id,msg){var e=document.getElementById(id);if(e){e.textContent=msg;setTimeout(function(){e.textContent='';},3000);}}
 
-rCF();
+// ── SAVE ──────────────────────────────────────────────────────────────────────
+function pArr(id){return document.getElementById(id).value.split(',').map(function(v){return parseFloat(v.trim());}).filter(function(v){return !isNaN(v);});}
+function pMo(id){return document.getElementById(id).value.split(',').map(function(v){return v.trim();}).filter(Boolean);}
+function pInt(id){return document.getElementById(id).value.split(',').map(function(v){return parseInt(v.trim());}).filter(function(v){return !isNaN(v);});}
+
+async function saveCF(){
+  var nd={lastUpdated:document.getElementById('cfDt').value.trim()||dCF.lastUpdated,a24:pArr('cf24'),a25:pArr('cf25'),tot:pArr('cfTt'),acc:pArr('cfAc')};
+  if(!nd.a24.length||!nd.a25.length||!nd.tot.length||!nd.acc.length){alert('A field appears empty.');return;}
+  try{await window.storage.set('ltv:shared:cf',JSON.stringify(nd),true);dCF=nd;document.getElementById('hd').textContent='Last updated: '+nd.lastUpdated;rCF();tog('cf');flash('cfM','Saved \u2713');}catch(e){alert('Error: '+e.message);}
+}
+async function saveNC(){
+  var mo=pMo('ncMo'),ct=pInt('ncCt');
+  if(!mo.length||mo.length!==ct.length){alert('Labels and counts must match.');return;}
+  var nd={lastUpdated:document.getElementById('ncDt').value.trim()||dNC.lastUpdated,mo:mo,ct:ct};
+  try{await window.storage.set('ltv:shared:nc',JSON.stringify(nd),true);dNC=nd;rNC();tog('nc');flash('ncM','Saved \u2713');}catch(e){alert('Error: '+e.message);}
+}
+async function saveRC(){
+  var mo=pMo('rcMo'),ct=pInt('rcCt');
+  if(!mo.length||mo.length!==ct.length){alert('Labels and counts must match.');return;}
+  var nd={lastUpdated:document.getElementById('rcDt').value.trim()||dRC.lastUpdated,mo:mo,ct:ct};
+  try{await window.storage.set('ltv:shared:rc',JSON.stringify(nd),true);dRC=nd;rRC();tog('rc');flash('rcM','Saved \u2713');}catch(e){alert('Error: '+e.message);}
+}
+async function saveAOV(){
+  var mo=pMo('aovMo'),vl=pArr('aovVl');
+  if(!mo.length||mo.length!==vl.length){alert('Labels and values must match.');return;}
+  var nd={lastUpdated:document.getElementById('aovDt').value.trim()||dAOV.lastUpdated,mo:mo,vl:vl};
+  try{await window.storage.set('ltv:shared:aov',JSON.stringify(nd),true);dAOV=nd;rAOV();tog('aov');flash('aovM','Saved \u2713');}catch(e){alert('Error: '+e.message);}
+}
+async function saveCAC(){
+  var mo=pMo('cacMo'),nc=pInt('cacNc'),cac=pArr('cacCc'),ad=pArr('cacAd');
+  if(!mo.length||mo.length!==nc.length||mo.length!==cac.length||mo.length!==ad.length){alert('All rows must match.');return;}
+  var nd={lastUpdated:document.getElementById('cacDt').value.trim()||dCAC.lastUpdated,mo:mo,nc:nc,cac:cac,ad:ad};
+  try{await window.storage.set('ltv:shared:cac',JSON.stringify(nd),true);dCAC=nd;rCAC();tog('cac');flash('cacM','Saved \u2713');}catch(e){alert('Error: '+e.message);}
+}
+async function saveTM(){
+  var mo=pMo('tmMo'),cac=pArr('tmCc'),aov=pArr('tmAv');
+  var tmRaw=document.getElementById('tmTm').value.split(',');
+  var tm=tmRaw.map(function(v){var p=parseFloat(v.trim());return isNaN(p)?null:p;});
+  if(!mo.length||mo.length!==cac.length||mo.length!==aov.length){alert('Months, CAC and AOV must match.');return;}
+  var nd={lastUpdated:document.getElementById('tmDt').value.trim()||dTM.lastUpdated,mo:mo,cac:cac,aov:aov,tm:tm};
+  try{await window.storage.set('ltv:shared:tm',JSON.stringify(nd),true);dTM=nd;rTM();tog('tm');flash('tmM','Saved \u2713');}catch(e){alert('Error: '+e.message);}
+}
+
+init();
 </script>
-</body>
-</html>
